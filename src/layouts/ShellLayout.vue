@@ -1,7 +1,7 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-none">
     <q-layout view="lHh lpr fFf">
-      <q-header elevated>
+      <q-header>
         <q-bar class="q-electron-drag">
           <q-icon name="laptop_chromebook" />
           <div>Base Application</div>
@@ -83,89 +83,14 @@
           <q-btn dense flat :icon="minbut" @click="maximize" />
           <q-btn dense flat icon="close" @click="closeApp" />
         </q-bar>
-        <div class="q-pa-sm q-pl-md row items-center">
-          <div class="cursor-pointer">Test</div>
-          <div class="cursor-pointer non-selectable">
-            File
-            <q-menu>
-              <q-list dense style="min-width: 100px">
-                <q-item clickable v-close-popup>
-                  <q-item-section>Open...</q-item-section>
-                </q-item>
-                <q-item clickable v-close-popup>
-                  <q-item-section>New</q-item-section>
-                </q-item>
-
-                <q-separator />
-
-                <q-item clickable>
-                  <q-item-section>Preferences</q-item-section>
-                  <q-item-section side>
-                    <q-icon name="keyboard_arrow_right" />
-                  </q-item-section>
-
-                  <q-menu anchor="top right" self="top left">
-                    <q-list>
-                      <q-item v-for="n in 3" :key="n" dense clickable>
-                        <q-item-section>Submenu Label</q-item-section>
-                        <q-item-section side>
-                          <q-icon name="keyboard_arrow_right" />
-                        </q-item-section>
-                        <q-menu auto-close anchor="top right" self="top left">
-                          <q-list>
-                            <q-item v-for="n in 3" :key="n" dense clickable>
-                              <q-item-section>3rd level Label</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </q-menu>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-item>
-
-                <q-separator />
-
-                <q-item clickable v-close-popup @click="closeApp">
-                  <q-item-section>Quit</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </div>
-
-          <div class="q-ml-md cursor-pointer non-selectable">
-            Edit
-            <q-menu auto-close>
-              <q-list dense style="min-width: 100px">
-                <q-item clickable>
-                  <q-item-section>Cut</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Copy</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Paste</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Select All</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </div>
-        </div>
       </q-header>
 
       <q-page-container>
         <router-view />
       </q-page-container>
-      <q-footer elevated class="bg-grey-8 text-white">
+      <q-footer class="bg-grey-8 text-white footerHeight">
       <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
-          Titlerddd
-        </q-toolbar-title>
+
       </q-toolbar>
     </q-footer>
     </q-layout>
