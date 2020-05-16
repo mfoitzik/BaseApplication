@@ -2,12 +2,12 @@
   <div class="q-pa-none">
     <q-layout view="lHh lpr fFf">
       <q-header>
-        <q-bar class="q-electron-drag">
-          <q-icon name="laptop_chromebook" />
-          <div>Base Application</div>
-          <div class="q-electron-drag--exception cursor-pointer">Test</div>
-          <div class="q-electron-drag--exception cursor-pointer non-selectable q-px-sm vertical-bottom" style="border:solid 1px red;height:32px;">
-          File
+        <q-bar class="q-electron-drag menu-bar" style="padding-left:0px;">
+          <q-img src="../assets/logo2.png" style="height:32px; width:50px;margin-right:0px;" />
+          <div class="q-electron-drag--exception cursor-pointer q-px-sm row items-center ba-menu-item">Test</div>
+          <div class="q-electron-drag--exception cursor-pointer non-selectable q-px-sm row items-center ba-menu-item">
+          <div>
+          Filex
           <q-menu>
             <q-list dense style="min-width: 100px">
               <q-item clickable v-close-popup>
@@ -57,7 +57,8 @@
             </q-list>
           </q-menu>
         </div>
-        <div class="q-electron-drag--exception cursor-pointer non-selectable">Edit
+        </div>
+        <div class="q-electron-drag--exception cursor-pointer non-selectable q-px-sm row items-center ba-menu-item">Edit
           <q-menu>
             <q-list dense style="min-width: 100px">
               <q-item clickable v-close-popup>
@@ -77,6 +78,7 @@
           </q-menu>
         </div>
           <q-space />
+          <div>Base Application</div>
           <div>Mike</div>
           <q-space />
           <q-btn dense flat icon="las la-window-minimize" @click="minimize" />
@@ -89,8 +91,13 @@
         <router-view />
       </q-page-container>
       <q-footer class="bg-grey-8 text-white footerHeight">
-      <q-toolbar>
-
+      <q-toolbar class="status-bar" style="height:25px; min-height:25px;">
+        <q-icon name="settings" />
+        <q-space />
+        <div style="padding-left:8px;padding-right:8px;">online</div>
+        <q-icon name="settings" class="ba-footer-icon" />
+        <q-icon name="publish" class="hidden ba-footer-icon" />
+        <q-icon name="search" class="ba-footer-icon" />
       </q-toolbar>
     </q-footer>
     </q-layout>
