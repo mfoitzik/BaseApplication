@@ -81,9 +81,9 @@
           <div>Base Application</div>
           <div>Mike</div>
           <q-space />
-          <q-btn dense flat icon="las la-window-minimize" @click="minimize" />
+          <q-btn dense flat icon="mdi-window-minimize" @click="minimize" />
           <q-btn dense flat :icon="minbut" @click="maximize" />
-          <q-btn dense flat icon="close" @click="closeApp" />
+          <q-btn dense flat icon="mdi-window-close" @click="closeApp" />
         </q-bar>
       </q-header>
 
@@ -130,10 +130,10 @@ export default {
 
         if (win.isMaximized()) {
           win.unmaximize()
-          this.minbut = 'crop_square'
+          this.minbut = 'mdi-window-maximize'
         } else {
           win.maximize()
-          this.minbut = 'filter_none'
+          this.minbut = 'mdi-window-restore'
         }
       }
     },

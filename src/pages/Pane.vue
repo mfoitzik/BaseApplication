@@ -3,16 +3,16 @@
     <q-page>
       <div class="activity-pane">
         <div class="row items-center justify-center activity-selector-icon-holder">
-          <q-icon name="folder_open" class="activity-selector-icon" />
+          <q-icon name="mdi-folder-outline" class="activity-selector-icon" />
         </div>
         <div class="row items-center justify-center activity-selector-icon-holder">
-          <q-icon name="search" class="activity-selector-icon" />
+          <q-icon name="mdi-magnify" class="activity-selector-icon" />
         </div>
         <div class="row items-center justify-center activity-selector-icon-holder">
-          <q-icon name="publish" class="activity-selector-icon" />
+          <q-icon name="mdi-publish" class="activity-selector-icon" />
         </div>
         <div class="row items-center justify-center activity-selector-icon-holder">
-          <q-icon name="settings" class="activity-selector-icon" />
+          <q-icon name="mdi-cog" class="activity-selector-icon" />
         </div>
       </div>
     </q-page>
@@ -45,14 +45,18 @@
                       </template>
 
                       <template v-slot:header-generic="prop">
-                        <div class="row items-center" :id="prop.node.myid" @contextmenu="miketest" @click="mikeclick" @doubleclick="mikedouble">
+                        <div class="row items-center no-wrap" :id="prop.node.myid" @contextmenu="miketest" @click="mikeclick" @doubleclick="mikedouble">
                           <q-icon :name="prop.node.icon || 'star'" color="orange" size="28px" class="q-mr-sm" />
-                          <div class="text-weight-bold text-primary">{{ prop.node.label }}</div>
+                          <div class="text-weight-bold text-primary" style="white-space:nowrap;">{{ prop.node.label }}</div>
                         </div>
                       </template>
 
+                      <template v-slot:default-header="prop">
+                        <div class="text-secondary" style="white-space:nowrap;">{{ prop.node.label }}</div>
+                      </template>
+
                       <template v-slot:body-story="prop">
-                        <span class="text-weight-thin" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
+                        <span class="row items-center text-weight-thin no-wrap" style="white-space:nowrap;" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
                       </template>
 
                       <template v-slot:body-toggle="prop">
@@ -144,7 +148,6 @@ export default {
           children: [
             {
               label: 'Quality ingredients',
-              header: 'generic',
               body: 'story',
               story: 'Lorem ipsum dolor sit amet.'
             },
