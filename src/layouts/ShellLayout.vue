@@ -3,7 +3,7 @@
     <q-layout view="lHh lpr fFf">
       <q-header>
         <q-bar class="q-electron-drag menu-bar" style="padding-left:0px;">
-          <q-img src="../assets/logo2.png" style="height:32px; width:50px;margin-right:0px;" />
+          <q-img src="../assets/BaseApplicationLogoWeb7.svg" style="height:30px; width:26px;margin-left:11px;margin-right:11px;" />
           <div class="q-electron-drag--exception cursor-pointer q-px-sm row items-center ba-menu-item">Test</div>
           <div class="q-electron-drag--exception cursor-pointer non-selectable q-px-sm row items-center ba-menu-item">
           <div>

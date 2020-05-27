@@ -23,50 +23,38 @@
 
       <template v-slot:before>
         <q-page>
-            <q-scroll-area class="q-pa-sm" style="height:500px;min-height:inherit;" visible>
+            <div class="q-pa-sm" style="height:10px;min-height:inherit;border:1px solid red;overflow:auto;" visible>
                 <div @contextmenu="showNodeSelected">TEST</div>
                 <div class="q-pa-md">
                   <button v-on:click = "showNodeSelected">showClickedNode</button>
                   <div class="mifo">
                     <q-tree
                       :nodes="customize"
+                      :duration="100"
                       node-key="label"
                       default-expand-all
                       ref="mytree"
                     >
-                      <template v-slot:header-root="prop">
-                        <div class="row items-center">
-                          <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" class="avatar q-mr-sm">
-                          <div>
-                            {{ prop.node.label }}
-                            <q-badge color="orange" class="q-ml-sm">New!</q-badge>
-                          </div>
-                        </div>
-                      </template>
 
                       <template v-slot:header-generic="prop">
                         <div class="row items-center no-wrap" :id="prop.node.myid" @contextmenu="miketest" @click="mikeclick" @doubleclick="mikedouble">
-                          <q-icon :name="prop.node.icon || 'star'" color="orange" size="28px" class="q-mr-sm" />
-                          <div class="text-weight-bold text-primary" style="white-space:nowrap;">{{ prop.node.label }}</div>
+                          <q-icon :name="prop.node.icon || 'star'" :color="prop.node.iconcolor || 'orange'" class="icon-common" />
+                          <div class="node-common">{{ prop.node.label }}</div>
                         </div>
                       </template>
 
                       <template v-slot:default-header="prop">
-                        <div class="text-secondary" style="white-space:nowrap;">{{ prop.node.label }}</div>
+                        <div class="node-common">{{ prop.node.label }}</div>
                       </template>
 
                       <template v-slot:body-story="prop">
-                        <span class="row items-center text-weight-thin no-wrap" style="white-space:nowrap;" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
+                        <span class="row items-center text-weight-thin" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
                       </template>
 
-                      <template v-slot:body-toggle="prop">
-                        <p class="text-caption">{{ prop.node.caption }}</p>
-                        <q-toggle v-model="prop.node.enabled" label="I agree to the terms and conditions" />
-                      </template>
                   </q-tree>
                 </div>
                 </div>
-            </q-scroll-area>
+            </div>
         </q-page>
       </template>
 
@@ -82,38 +70,7 @@
       <template v-slot:before>
         <div class="q-pa-md">
           <div class="text-h4 q-mb-md">Before</div>
-          <q-tree
-                      :nodes="customize"
-                      node-key="label"
-                      default-expand-all
-                      ref="mytree"
-                    >
-                      <template v-slot:header-root="prop">
-                        <div class="row items-center">
-                          <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" class="avatar q-mr-sm">
-                          <div>
-                            {{ prop.node.label }}
-                            <q-badge color="orange" class="q-ml-sm">New!</q-badge>
-                          </div>
-                        </div>
-                      </template>
 
-                      <template v-slot:header-generic="prop">
-                        <div class="row items-center" :id="prop.node.myid" @contextmenu="miketest" @click="mikeclick" @doubleclick="mikedouble">
-                          <q-icon :name="prop.node.icon || 'star'" color="orange" size="28px" class="q-mr-sm" />
-                          <div class="text-weight-bold text-primary">{{ prop.node.label }}</div>
-                        </div>
-                      </template>
-
-                      <template v-slot:body-story="prop">
-                        <span class="text-weight-thin" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
-                      </template>
-
-                      <template v-slot:body-toggle="prop">
-                        <p class="text-caption">{{ prop.node.caption }}</p>
-                        <q-toggle v-model="prop.node.enabled" label="I agree to the terms and conditions" />
-                      </template>
-                  </q-tree>
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -142,7 +99,8 @@ export default {
       customize: [
         {
           label: 'Good food',
-          icon: 'restaurant_menu',
+          icon: 'mdi-fire-truck',
+          iconcolor: 'teal-10',
           header: 'generic',
           myid: 'gf1',
           children: [
@@ -167,7 +125,13 @@ export default {
           // caption: 'Why are we as consumers so captivated by stories of great customer service? Perhaps it is because...',
           enabled: false,
           children: [
-            { label: 'Prompt attention' },
+            {
+              label: 'Prompt attention',
+              children: [
+                { label: 'child node one' },
+                { label: 'child node two' }
+              ]
+            },
             { label: 'Professional waiter' }
           ]
         },

@@ -1,20 +1,51 @@
+$vertColor: red;
+$vertWidth: 1px;
+$vertStyle: solid;
+$hrzColor: red;
+$hrzWidth: 1px;
+$hrzStyle: dotted;
+$commonWrap: nowrap;
+$vertPosition: -13px; // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
+$elPosition: -35px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
+$elWidth: 35px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
+$nodePaddingLeft: 22px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+$iconSize: 25px;
+$iconPaddingBottom: 5px;
+$iconMarginRight: 5px;
+$nodePadding: 4px;
+$nodeMarginTop: 4px;
+$nodeColor: green;
+$storyPadding: 5px 0 8px 5px;
+$storySize: 14px;
+$storyColor: purple !important;
 .mifo {
+  .node-common {
+    white-space: $commonWrap;
+    color: $nodeColor;
+    // color:pink !important;
+  }
+
+  .icon-common {
+    font-size: $iconSize;
+    padding-bottom: $iconPaddingBottom;
+    margin-right: $iconMarginRight;
+  }
   .q-tree {
     position: relative;
     color: $blue;
 
     &__node {
-      padding: 0 0 3px 22px; // this adjusts entire node position
+      padding: 0 0 3px $nodePaddingLeft; // this adjusts entire node position
 // the following is the left vertical
       &:after {
         content: "";
         position: absolute;
-        top: -3px;
+        top: -4px;
         bottom: 0;
         width: 2px;
         right: auto;
-        left: -13px;
-        border-left: 1px solid currentColor;
+        left: $vertPosition; // part of left position adjust
+        border-left: $vertWidth $vertStyle $vertColor;
       }
 
       &:last-child:after {
@@ -47,20 +78,22 @@
     &__node-header:before {
       content: "";
       position: absolute;
-      top: -3px;
+      top: -4px;
       bottom: 50%;
-      width: 35px;
-      left: -35px;
-      border-left: 1px solid currentColor;
-      border-bottom: 1px solid currentColor;
+      width: $elWidth; // part of left position adjust
+      left: $elPosition; // part of left position adjust
+      border-left: $vertWidth $vertStyle $vertColor;
+      border-bottom: $hrzWidth $hrzStyle $hrzColor;
     }
 // entire child node
     &__children {
-      padding-left: 25px;
+      padding-left: 25px; // part of left position adjust (for entire tree)
     }
 // "story"/body nodes
     &__node-body {
-      padding: 5px 0 8px 5px;
+      padding: $storyPadding;
+      font-size: $storySize;
+      color: $storyColor;
     }
 
     &__node--parent {
@@ -73,7 +106,7 @@
 
       > .q-tree__node-collapsible > .q-tree__node-body {
         padding: 5px 0 8px 27px;
-
+        
         &:after {
           content: "";
           position: absolute;
@@ -93,8 +126,8 @@
     }
 // adjust below to tighten up nodes padding and margin top was at 4px
     &__node-header {
-      padding: 4px;
-      margin-top: 4px;
+      padding: $nodePadding;
+      margin-top: $nodeMarginTop;
       border-radius: $generic-border-radius;
       outline: 0;
     }
