@@ -1,3 +1,6 @@
+:root {
+  --color-test: blue;
+}
 $vertColor: red;
 $vertWidth: 1px;
 $vertStyle: solid;
@@ -6,9 +9,9 @@ $hrzWidth: 1px;
 $hrzStyle: dotted;
 $commonWrap: nowrap;
 $vertPosition: -13px; // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
-$elPosition: -35px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
-$elWidth: 35px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
-$nodePaddingLeft: 22px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+$elPosition: -13px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
+$elWidth: 13px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
+$nodePaddingLeft: 0px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
 $iconSize: 25px;
 $iconPaddingBottom: 5px;
 $iconMarginRight: 5px;
@@ -17,7 +20,8 @@ $nodeMarginTop: 4px;
 $nodeColor: green;
 $storyPadding: 5px 0 8px 5px;
 $storySize: 14px;
-$storyColor: purple !important;
+$storyColor: var(--color-test) !important;
+$storyWrap: nowrap;
 .mifo {
   .node-common {
     white-space: $commonWrap;
@@ -94,6 +98,7 @@ $storyColor: purple !important;
       padding: $storyPadding;
       font-size: $storySize;
       color: $storyColor;
+      white-space: $storyWrap;
     }
 
     &__node--parent {

@@ -1,0 +1,7 @@
+:root { 
+    --text-size: 35px; 
+} 
+p.mike { 
+    color: blue;
+    font-size: var(--text-size); 
+} 

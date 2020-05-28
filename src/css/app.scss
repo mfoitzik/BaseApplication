@@ -1,10 +1,15 @@
 // app global css in SCSS form
 @import "treeoverride";
+@import "test.css";
 
 body {
   overflow: hidden;
 }
 
+.my-picker {
+  max-width: 150px;
+  width: 100px;
+}
 .footerHeight {
   height: 25px;
 }

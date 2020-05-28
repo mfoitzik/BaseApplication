@@ -70,7 +70,9 @@
       <template v-slot:before>
         <div class="q-pa-md">
           <div class="text-h4 q-mb-md">Before</div>
-
+          <p class="mike">Hello Mike Test</p>
+          <p class="mike">Hello Mike Test</p>
+          <p class="mike">Hello Mike Test</p>
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -78,6 +80,19 @@
       <template v-slot:after>
         <div class="q-pa-md">
           <div class="text-h4 q-mb-md">After</div>
+          <q-btn color="purple" label="Account Settings">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <q-color
+                  v-model="hex"
+                  class="my-picker"
+                  style="width:100px; !important"
+                  @change="val => { setStoryColor (val) }"
+                 />
+              </div>
+            </q-menu>
+          </q-btn>
+          <q-slider v-model="standard" :min="-10" :max="20" style="max-width:200px;" />
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -94,6 +109,8 @@
 export default {
   data () {
     return {
+      standard: 2,
+      hex: '#37997a',
       splitterModel: 20, // start at 50%
       splitterModel2: 50,
       customize: [
@@ -169,6 +186,10 @@ export default {
       // event.cancelBubble = true
       console.log('DOUBLEclick: ' + event.currentTarget.id)
       // JSON.stringify(this)
+    },
+    setStoryColor: function (newColor) {
+      var titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--color-test', newColor) })
     }
   }
 }
