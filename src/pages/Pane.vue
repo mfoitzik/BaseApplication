@@ -99,12 +99,34 @@
                   v-model="hexNode"
                   class="my-picker"
                   style="width:100px; !important"
-                  @change="val => { setNodeColor (val) }"
+                  @change="setNodeColor"
                  />
               </div>
             </q-menu>
           </q-btn>
           <q-slider v-model="standard" :min="-10" :max="20" style="max-width:200px;" />
+          <q-select
+            filled
+            v-model="model"
+            :options="options"
+            label="Font Family"
+            color="teal"
+            clearable
+            options-selected-class="text-deep-orange"
+            ref="nodeFontSelector"
+            @input="val => { setNodeFontFamily(val.model) }"
+          >
+            <template v-slot:option="scope">
+              <q-item
+                v-bind="scope.itemProps"
+                v-on="scope.itemEvents"
+              >
+                <q-item-section>
+                  <q-item-label v-html="scope.opt.label" :style="scope.opt.labelstyle" />
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -175,6 +197,114 @@ export default {
           ]
         }
       ],
+      model: null,
+      options: [
+        {
+          label: 'Arial, Helvetica, sans-serif',
+          labelstyle: 'font-family: Arial, Helvetica, sans-serif',
+          value: 'Arial, Helvetica, sans-serif'
+        },
+        {
+          label: '"Arial Black", Gadget, sans-serif',
+          labelstyle: 'font-family: "Arial Black", Gadget, sans-serif',
+          value: '"Arial Black", Gadget, sans-serif'
+        },
+        {
+          label: '"Bookman Old Style", serif',
+          labelstyle: 'font-family: "Bookman Old Style", serif',
+          value: '"Bookman Old Style", serif'
+        },
+        {
+          label: '"Comic Sans MS", cursive, sans-serif',
+          labelstyle: 'font-family: "Comic Sans MS", cursive, sans-serif',
+          value: '"Comic Sans MS", cursive, sans-serif'
+        },
+        {
+          label: 'Courier, monospace',
+          labelstyle: 'font-family: Courier, monospace',
+          value: 'Courier, monospace'
+        },
+        {
+          label: '"Courier New", Courier, monospace',
+          labelstyle: 'font-family: "Courier New", Courier, monospace',
+          value: '"Courier New", Courier, monospace'
+        },
+        {
+          label: 'Garamond, serif',
+          labelstyle: 'font-family: Garamond, serif',
+          value: 'Garamond, serif'
+        },
+        {
+          label: 'Georgia, serif',
+          labelstyle: 'font-family: Georgia, serif',
+          value: 'Georgia, serif'
+        },
+        {
+          label: 'Impact, Charcoal, sans-serif',
+          labelstyle: 'font-family: Impact, Charcoal, sans-serif',
+          value: 'Impact, Charcoal, sans-serif'
+        },
+        {
+          label: '"Lucida Console", Monaco, monospace',
+          labelstyle: 'font-family: "Lucida Console", Monaco, monospace',
+          value: '"Lucida Console", Monaco, monospace'
+        },
+        {
+          label: '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
+          labelstyle: 'font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif',
+          value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif'
+        },
+        {
+          label: '"MS Sans Serif", Geneva, sans-serif',
+          labelstyle: 'font-family: "MS Sans Serif", Geneva, sans-serif',
+          value: '"MS Sans Serif", Geneva, sans-serif'
+        },
+        {
+          label: '"MS Serif", "New York", sans-serif',
+          labelstyle: 'font-family: "MS Serif", "New York", sans-serif',
+          value: '"MS Serif", "New York", sans-serif'
+        },
+        {
+          label: '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+          labelstyle: 'font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif',
+          value: '"Palatino Linotype", "Book Antiqua", Palatino, serif'
+        },
+        {
+          label: 'Symbol, sans-serif',
+          labelstyle: 'font-family: Symbol, sans-serif',
+          value: 'Symbol, sans-serif'
+        },
+        {
+          label: 'Tahoma, Geneva, sans-serif',
+          labelstyle: 'font-family: Tahoma, Geneva, sans-serif',
+          value: 'Tahoma, Geneva, sans-serif'
+        },
+        {
+          label: '"Times New Roman", Times, serif',
+          labelstyle: 'font-family: "Times New Roman", Times, serif',
+          value: '"Times New Roman", Times, serif'
+        },
+        {
+          label: '"Trebuchet MS", Helvetica, sans-serif',
+          labelstyle: 'font-family: "Trebuchet MS", Helvetica, sans-serif',
+          value: '"Trebuchet MS", Helvetica, sans-serif'
+        },
+        {
+          label: 'Verdana, Geneva, sans-serif',
+          labelstyle: 'font-family: Verdana, Geneva, sans-serif',
+          value: 'Verdana, Geneva, sans-serif'
+        },
+        {
+          label: 'Webdings, sans-serif',
+          labelstyle: 'font-family: Webdings, sans-serif',
+          value: 'Webdings, sans-serif'
+        },
+        {
+          label: 'Wingdings, "Zapf Dingbats", sans-serif',
+          labelstyle: 'font-family: Wingdings, "Zapf Dingbats", sans-serif',
+          value: 'Wingdings, "Zapf Dingbats", sans-serif'
+        }
+      ],
       onclick (node) {
         alert(node.label)
       }
@@ -207,6 +337,12 @@ export default {
     setNodeColor: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__node')
       titems.forEach(function (userItem) { userItem.style.setProperty('--node-color', newColor) })
+    },
+    setNodeFontFamily: function (newFontFace) {
+      console.log('SET FONT: ' + this.model.value)
+      const newFontFamily = this.model.value
+      const titems = document.querySelectorAll('.node-common')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--node-font-family', newFontFamily) })
     }
   }
 }
