@@ -84,10 +84,22 @@
             <q-menu>
               <div class="row no-wrap q-pa-md">
                 <q-color
-                  v-model="hex"
+                  v-model="hexStory"
                   class="my-picker"
                   style="width:100px; !important"
                   @change="val => { setStoryColor (val) }"
+                 />
+              </div>
+            </q-menu>
+          </q-btn>
+          <q-btn color="purple" label="Account Settings">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <q-color
+                  v-model="hexNode"
+                  class="my-picker"
+                  style="width:100px; !important"
+                  @change="val => { setNodeColor (val) }"
                  />
               </div>
             </q-menu>
@@ -110,7 +122,8 @@ export default {
   data () {
     return {
       standard: 2,
-      hex: '#37997a',
+      hexStory: '#37997a',
+      hexNode: '#37997a',
       splitterModel: 20, // start at 50%
       splitterModel2: 50,
       customize: [
@@ -188,8 +201,12 @@ export default {
       // JSON.stringify(this)
     },
     setStoryColor: function (newColor) {
-      var titems = document.querySelectorAll('.q-tree__node-body')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--color-test', newColor) })
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--story-color', newColor) })
+    },
+    setNodeColor: function (newColor) {
+      const titems = document.querySelectorAll('.q-tree__node')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--node-color', newColor) })
     }
   }
 }

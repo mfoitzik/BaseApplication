@@ -1,45 +1,78 @@
 :root {
-  --color-test: blue;
+  --vert-color: red;
+  --vert-width: 1px;
+  --vert-style: solid;
+  --hrz-color: red;
+  --hrz-width: 1px;
+  --hrz-style: dotted;
+  --node-wrap: nowrap;
+  --vert-position: -13px; // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
+  --el-position: -13px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
+  --el-width: 13px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
+  --node-padding-left: 0px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+  --icon-size: 25px;
+  --icon-padding-bottom: 5px;
+  --icon-margin-right: 5px;
+  --node-padding: 4px;
+  --node-margin-top: 4px;
+  --node-color: blue;
+  --node-font-family: 'comic sans ms';
+  --node-font-size: 14px;
+  --node-font-weight: 400;
+  --story-color: green !important;
+  --story-font-family: 'Lucida Console', 'courier new';
+  --story-font-size: 14px;
+  --story-font-weight: 600;
+  --story-padding: 5px 0 8px 5px;
+  --story-wrap: nowrap;
 }
-$vertColor: red;
-$vertWidth: 1px;
-$vertStyle: solid;
-$hrzColor: red;
-$hrzWidth: 1px;
-$hrzStyle: dotted;
-$commonWrap: nowrap;
-$vertPosition: -13px; // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
-$elPosition: -13px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
-$elWidth: 13px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
-$nodePaddingLeft: 0px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
-$iconSize: 25px;
-$iconPaddingBottom: 5px;
-$iconMarginRight: 5px;
-$nodePadding: 4px;
-$nodeMarginTop: 4px;
-$nodeColor: green;
-$storyPadding: 5px 0 8px 5px;
-$storySize: 14px;
-$storyColor: var(--color-test) !important;
-$storyWrap: nowrap;
+$vert-color: var(--vert-color);
+$vert-width: var(--vert-width);
+$vert-style: var(--vert-style);
+$hrz-color: var(--hrz-color);
+$hrz-width: var(--hrz-width);
+$hrz-style: var(--hrz-style);
+$node-wrap: var(--node-wrap);
+$vert-position: var(--vert-position); // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
+$el-position: var(--el-position); // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
+$el-width: var(--el-width); // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
+$node-padding-left: var(--node-padding-left); // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+$icon-size: var(--icon-size);
+$icon-padding-bottom: var(--icon-padding-bottom);
+$icon-margin-right: var(--icon-margin-right);
+$node-padding: var(--node-padding);
+$node-margin-top: var(--node-margin-top);
+$node-color: var(--node-color);
+$node-font-family: var(--node-font-family);
+$node-font-size: var(--node-font-size);
+$node-font-weight: var(--node-font-weight);
+$story-padding: var(--story-padding);
+$story-color: var(--story-color) !important;
+$story-font-family: var(--story-font-family);
+$story-font-size: var(--story-font-size);
+$story-font-weight: var(--story-font-weight);
+$story-wrap: var(--story-wrap);
 .mifo {
   .node-common {
-    white-space: $commonWrap;
-    color: $nodeColor;
+    white-space: $node-wrap;
+    color: $node-color;
+    font-family: $node-font-family;
+    font-size: $node-font-size;
+    font-weight: $node-font-weight;
     // color:pink !important;
   }
 
   .icon-common {
-    font-size: $iconSize;
-    padding-bottom: $iconPaddingBottom;
-    margin-right: $iconMarginRight;
+    font-size: $icon-size;
+    padding-bottom: $icon-padding-bottom;
+    margin-right: $icon-margin-right;
   }
   .q-tree {
     position: relative;
     color: $blue;
 
     &__node {
-      padding: 0 0 3px $nodePaddingLeft; // this adjusts entire node position
+      padding: 0 0 3px $node-padding-left; // this adjusts entire node position
 // the following is the left vertical
       &:after {
         content: "";
@@ -48,8 +81,8 @@ $storyWrap: nowrap;
         bottom: 0;
         width: 2px;
         right: auto;
-        left: $vertPosition; // part of left position adjust
-        border-left: $vertWidth $vertStyle $vertColor;
+        left: $vert-position; // part of left position adjust
+        border-left: $vert-width $vert-style $vert-color;
       }
 
       &:last-child:after {
@@ -84,10 +117,10 @@ $storyWrap: nowrap;
       position: absolute;
       top: -4px;
       bottom: 50%;
-      width: $elWidth; // part of left position adjust
-      left: $elPosition; // part of left position adjust
-      border-left: $vertWidth $vertStyle $vertColor;
-      border-bottom: $hrzWidth $hrzStyle $hrzColor;
+      width: $el-width; // part of left position adjust
+      left: $el-position; // part of left position adjust
+      border-left: $vert-width $vert-style $vert-color;
+      border-bottom: $hrz-width $hrz-style $hrz-color;
     }
 // entire child node
     &__children {
@@ -95,10 +128,12 @@ $storyWrap: nowrap;
     }
 // "story"/body nodes
     &__node-body {
-      padding: $storyPadding;
-      font-size: $storySize;
-      color: $storyColor;
-      white-space: $storyWrap;
+      padding: $story-padding;
+      font-size: $story-font-size;
+      font-family: $story-font-family;
+      font-weight: $story-font-weight;
+      color: $story-color;
+      white-space: $story-wrap;
     }
 
     &__node--parent {
@@ -131,8 +166,8 @@ $storyWrap: nowrap;
     }
 // adjust below to tighten up nodes padding and margin top was at 4px
     &__node-header {
-      padding: $nodePadding;
-      margin-top: $nodeMarginTop;
+      padding: $node-padding;
+      margin-top: $node-margin-top;
       border-radius: $generic-border-radius;
       outline: 0;
     }
