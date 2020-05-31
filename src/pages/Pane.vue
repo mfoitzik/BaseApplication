@@ -104,29 +104,35 @@
               </div>
             </q-menu>
           </q-btn>
+          <q-btn color="purple" label="Font Settings">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <q-select
+                  filled
+                  v-model="model"
+                  :options="options"
+                  label="Font Family"
+                  color="teal"
+                  clearable
+                  options-selected-class="text-deep-orange"
+                  ref="nodeFontSelector"
+                  @input="setNodeFontFamily"
+                >
+                  <template v-slot:option="scope">
+                    <q-item
+                      v-bind="scope.itemProps"
+                      v-on="scope.itemEvents"
+                    >
+                      <q-item-section>
+                        <q-item-label v-html="scope.opt.label" :style="scope.opt.labelstyle" />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+              </div>
+            </q-menu>
+          </q-btn>
           <q-slider v-model="standard" :min="-10" :max="20" style="max-width:200px;" />
-          <q-select
-            filled
-            v-model="model"
-            :options="options"
-            label="Font Family"
-            color="teal"
-            clearable
-            options-selected-class="text-deep-orange"
-            ref="nodeFontSelector"
-            @input="val => { setNodeFontFamily(val.model) }"
-          >
-            <template v-slot:option="scope">
-              <q-item
-                v-bind="scope.itemProps"
-                v-on="scope.itemEvents"
-              >
-                <q-item-section>
-                  <q-item-label v-html="scope.opt.label" :style="scope.opt.labelstyle" />
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -339,10 +345,14 @@ export default {
       titems.forEach(function (userItem) { userItem.style.setProperty('--node-color', newColor) })
     },
     setNodeFontFamily: function (newFontFace) {
-      console.log('SET FONT: ' + this.model.value)
-      const newFontFamily = this.model.value
-      const titems = document.querySelectorAll('.node-common')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--node-font-family', newFontFamily) })
+      // console.log('SET FONT: ' + this.model.value)
+      if (this.model !== null) {
+        const newFontFamily = this.model.value
+        if (newFontFamily !== null) {
+          const titems = document.querySelectorAll('.node-common')
+          titems.forEach(function (userItem) { userItem.style.setProperty('--node-font-family', newFontFamily) })
+        }
+      }
     }
   }
 }
