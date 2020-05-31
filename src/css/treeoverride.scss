@@ -1,4 +1,6 @@
 :root {
+  --arrow-color: gray;
+  --arrow-size: 18px;
   --vert-color: red;
   --vert-width: 1px;
   --vert-style: solid;
@@ -10,6 +12,7 @@
   --el-position: -13px; // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
   --el-width: 13px; // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
   --node-padding-left: 0px; // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+  --icon-color: teal;
   --icon-size: 25px;
   --icon-padding-bottom: 5px;
   --icon-margin-right: 5px;
@@ -19,13 +22,15 @@
   --node-font-family: 'comic sans ms';
   --node-font-size: 14px;
   --node-font-weight: 400;
-  --story-color: green !important;
+  --story-color: green;
   --story-font-family: 'Lucida Console', 'courier new';
   --story-font-size: 14px;
   --story-font-weight: 600;
   --story-padding: 5px 0 8px 5px;
   --story-wrap: nowrap;
 }
+$arrow-color: var(--arrow-color);
+$arrow-size: var(--arrow-size);
 $vert-color: var(--vert-color);
 $vert-width: var(--vert-width);
 $vert-style: var(--vert-style);
@@ -37,6 +42,7 @@ $vert-position: var(--vert-position); // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER
 $el-position: var(--el-position); // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
 $el-width: var(--el-width); // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
 $node-padding-left: var(--node-padding-left); // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+$icon-color: var(--icon-color);
 $icon-size: var(--icon-size);
 $icon-padding-bottom: var(--icon-padding-bottom);
 $icon-margin-right: var(--icon-margin-right);
@@ -66,6 +72,7 @@ $story-wrap: var(--story-wrap);
     font-size: $icon-size;
     padding-bottom: $icon-padding-bottom;
     margin-right: $icon-margin-right;
+    color:$icon-color !important;
   }
   .q-tree {
     position: relative;
@@ -201,6 +208,8 @@ $story-wrap: var(--story-wrap);
     }
 
     &__arrow {
+      font-size: $arrow-size;
+      color: $arrow-color;
       transition: transform 0.3s;
 
       &--rotate {

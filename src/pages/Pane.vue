@@ -132,7 +132,18 @@
               </div>
             </q-menu>
           </q-btn>
-          <q-slider v-model="standard" :min="-10" :max="20" style="max-width:200px;" />
+          <q-slider
+          v-model="standard"
+          :min="-10"
+          :max="20"
+          style="max-width:200px;"
+          @input="val => { testSlider (val) }"
+           />
+           <q-input
+              v-model="text"
+              filled
+              type="textarea"
+            />
           <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
         </div>
       </template>
@@ -146,9 +157,14 @@
 </template>
 
 <script>
+var codetemplatebase = `This is line 1: {mystandard}
+This is line 2
+This is line 3`
+var codetemplate = codetemplatebase
 export default {
   data () {
     return {
+      text: codetemplate,
       standard: 2,
       hexStory: '#37997a',
       hexNode: '#37997a',
@@ -353,6 +369,13 @@ export default {
           titems.forEach(function (userItem) { userItem.style.setProperty('--node-font-family', newFontFamily) })
         }
       }
+    },
+    testSlider: function (newVal) {
+      console.log('testslider: ' + newVal)
+      codetemplate = codetemplatebase.replace('{mystandard}', newVal)
+      this.text = codetemplate
+      // const newSliderValue = this.model.standard
+      // console.log('NEW VAL: ' + newSliderValue)
     }
   }
 }
