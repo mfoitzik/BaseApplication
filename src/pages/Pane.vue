@@ -63,17 +63,52 @@
             <q-splitter
       v-model="splitterModel2"
       :limits="[0, Infinity]"
-      horizontal
+      :horizontal = "splitterOrientation"
       style="height: 10px;min-height:inherit;"
     >
 
       <template v-slot:before>
         <div class="q-pa-md">
           <div class="text-h4 q-mb-md">Before</div>
-          <p class="mike">Hello Mike Test</p>
-          <p class="mike">Hello Mike Test</p>
-          <p class="mike">Hello Mike Test</p>
-          <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
+          <div>
+            <q-img src="../assets/TreeSectionCallouts.png" style="width:443px;height:253px;" />
+          </div>
+          <q-card class="config-card">
+            <q-card-section>
+              <div class="text-h6"><q-img src="../assets/callout1.png" style="width:40px;height:40px;margin-right:7px;" />Arrow</div>
+            </q-card-section>
+
+            <q-separator />
+
+            <q-card-actions vertical>
+              <div>Arrow Color</div>
+              <q-input
+                filled
+                v-model="arrowColor"
+                class="my-input"
+                dense
+                @change="setArrowColorFromText"
+              >
+                <template v-slot:append>
+                  <q-icon name="colorize" class="cursor-pointer">
+                    <q-popup-proxy transition-show="scale" transition-hide="scale">
+                      <q-color
+                        v-model="arrowColor"
+                        @change="val => { setArrowColor (val) }"
+                      />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+              <div style="border-top:1px solid lightgray;margin-top:8px;">Arrow Size ({{arrowSize}}px)</div>
+              <q-slider
+                v-model="arrowSize"
+                :min="1"
+                :max="50"
+                @input="val => { setArrowSize (val) }"
+              />
+            </q-card-actions>
+          </q-card>
         </div>
       </template>
 
@@ -133,11 +168,11 @@
             </q-menu>
           </q-btn>
           <q-slider
-          v-model="standard"
-          :min="-10"
-          :max="20"
-          style="max-width:200px;"
-          @input="val => { testSlider (val) }"
+            v-model="standard"
+            :min="1"
+            :max="20"
+            style="max-width:200px;"
+            @input="val => { testSlider (val) }"
            />
            <q-input
               v-model="text"
@@ -164,8 +199,11 @@ var codetemplate = codetemplatebase
 export default {
   data () {
     return {
+      splitterOrientation: true,
       text: codetemplate,
       standard: 2,
+      arrowColor: '#000000',
+      arrowSize: 18,
       hexStory: '#37997a',
       hexNode: '#37997a',
       splitterModel: 20, // start at 50%
@@ -173,7 +211,7 @@ export default {
       customize: [
         {
           label: 'Good food',
-          icon: 'mdi-fire-truck',
+          icon: 'restaurant_menu',
           iconcolor: 'teal-10',
           header: 'generic',
           myid: 'gf1',
@@ -181,12 +219,12 @@ export default {
             {
               label: 'Quality ingredients',
               body: 'story',
-              story: 'Lorem ipsum dolor sit amet.'
+              story: 'Our ingredients are sourced locally.'
             },
             {
               label: 'Good recipe',
               body: 'story',
-              story: 'A Congressman works with his equally conniving wife to exact revenge on the people who betrayed him.',
+              story: 'Secret family recipes that everyone loves!',
               myid: 'mifo1'
             }
           ]
@@ -355,6 +393,19 @@ export default {
     setStoryColor: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__node-body')
       titems.forEach(function (userItem) { userItem.style.setProperty('--story-color', newColor) })
+    },
+    setArrowColor: function (newColor) {
+      const titems = document.querySelectorAll('.q-tree__arrow')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-color', newColor) })
+    },
+    setArrowSize: function (newSize) {
+      const titems = document.querySelectorAll('.q-tree__arrow')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-size', newSize + 'px') })
+    },
+    setArrowColorFromText: function (e) {
+      console.log('TEST')
+      const titems = document.querySelectorAll('.q-tree__arrow')
+      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-color', e.target.value) })
     },
     setNodeColor: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__node')
