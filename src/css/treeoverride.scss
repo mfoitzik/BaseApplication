@@ -1,6 +1,7 @@
 :root {
   --arrow-color: gray;
   --arrow-size: 18px;
+  --arrow-margin: 0px;
   --vert-color: red;
   --vert-width: 1px;
   --vert-style: solid;
@@ -26,18 +27,21 @@
   --story-font-family: arial;
   --story-font-size: 14px;
   --story-font-weight: 600;
-  --story-padding: 5px 0 8px 5px;
+  --story-padding-top: 5px;
+  --story-padding-right: 0;
+  --story-padding-bottom: 8px;
+  --story-padding-left: 5px;
   --story-wrap: nowrap;
 }
 $arrow-color: var(--arrow-color);
 $arrow-size: var(--arrow-size);
+$arrow-margin: var(--arrow-margin);
 $vert-color: var(--vert-color);
 $vert-width: var(--vert-width);
 $vert-style: var(--vert-style);
 $hrz-color: var(--hrz-color);
 $hrz-width: var(--hrz-width);
 $hrz-style: var(--hrz-style);
-$node-wrap: var(--node-wrap);
 $vert-position: var(--vert-position); // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
 $el-position: var(--el-position); // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
 $el-width: var(--el-width); // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
@@ -46,19 +50,23 @@ $icon-color: var(--icon-color);
 $icon-size: var(--icon-size);
 $icon-padding-bottom: var(--icon-padding-bottom);
 $icon-margin-right: var(--icon-margin-right);
-$node-padding: var(--node-padding);
-$node-margin-top: var(--node-margin-top);
 $node-color: var(--node-color);
 $node-font-family: var(--node-font-family);
 $node-font-size: var(--node-font-size);
 $node-font-weight: var(--node-font-weight);
-$story-padding: var(--story-padding);
+$node-margin-top: var(--node-margin-top);
+$node-padding: var(--node-padding);
+$node-wrap: var(--node-wrap);
+$story-padding-top: var(--story-padding-top);
+$story-padding-right: var(--story-padding-right);
+$story-padding-bottom: var(--story-padding-bottom);
+$story-padding-left: var(--story-padding-left);
 $story-color: var(--story-color) !important;
 $story-font-family: var(--story-font-family);
 $story-font-size: var(--story-font-size);
 $story-font-weight: var(--story-font-weight);
 $story-wrap: var(--story-wrap);
-.mifo {
+.tree-wrapper {
   .node-common {
     white-space: $node-wrap;
     color: $node-color;
@@ -69,7 +77,7 @@ $story-wrap: var(--story-wrap);
   }
 
   .icon-common {
-    font-size: $icon-size;
+    font-size: $icon-size !important;
     padding-bottom: $icon-padding-bottom;
     margin-right: $icon-margin-right;
     color:$icon-color !important;
@@ -135,7 +143,7 @@ $story-wrap: var(--story-wrap);
     }
 // "story"/body nodes
     &__node-body {
-      padding: $story-padding;
+      padding: $story-padding-top $story-padding-right $story-padding-bottom $story-padding-left;
       font-size: $story-font-size;
       font-family: $story-font-family;
       font-weight: $story-font-weight;
@@ -210,6 +218,7 @@ $story-wrap: var(--story-wrap);
     &__arrow {
       font-size: $arrow-size;
       color: $arrow-color;
+      margin-left: $arrow-margin;
       transition: transform 0.3s;
 
       &--rotate {

@@ -2,191 +2,831 @@
   <div class="fit row no-wrap justify-start items-start content-start">
     <q-page>
       <div class="activity-pane">
-        <div class="row items-center justify-center activity-selector-icon-holder">
+        <div
+          class="row items-center justify-center activity-selector-icon-holder"
+        >
           <q-icon name="mdi-folder-outline" class="activity-selector-icon" />
         </div>
-        <div class="row items-center justify-center activity-selector-icon-holder">
+        <div
+          class="row items-center justify-center activity-selector-icon-holder"
+        >
           <q-icon name="mdi-magnify" class="activity-selector-icon" />
         </div>
-        <div class="row items-center justify-center activity-selector-icon-holder">
+        <div
+          class="row items-center justify-center activity-selector-icon-holder"
+        >
           <q-icon name="mdi-publish" class="activity-selector-icon" />
         </div>
-        <div class="row items-center justify-center activity-selector-icon-holder">
+        <div
+          class="row items-center justify-center activity-selector-icon-holder"
+        >
           <q-icon name="mdi-cog" class="activity-selector-icon" />
         </div>
       </div>
     </q-page>
-    <div class="col" style="display:inline-block;">
-    <q-splitter
-      v-model="splitterModel"
-    >
-
-      <template v-slot:before>
-        <q-page>
-            <div class="q-pa-sm" style="height:10px;min-height:inherit;border:1px solid red;overflow:auto;" visible>
-                <div @contextmenu="showNodeSelected">TEST</div>
-                <div class="q-pa-md">
-                  <button v-on:click = "showNodeSelected">showClickedNode</button>
-                  <div class="mifo">
-                    <q-tree
-                      :nodes="customize"
-                      :duration="100"
-                      node-key="label"
-                      default-expand-all
-                      ref="mytree"
-                    >
-
-                      <template v-slot:header-generic="prop">
-                        <div class="row items-center no-wrap" :id="prop.node.myid" @contextmenu="miketest" @click="mikeclick" @doubleclick="mikedouble">
-                          <q-icon :name="prop.node.icon || 'star'" :color="prop.node.iconcolor || 'orange'" class="icon-common" />
-                          <div class="node-common">{{ prop.node.label }}</div>
-                        </div>
-                      </template>
-
-                      <template v-slot:default-header="prop">
+    <div class="col" style="display: inline-block;">
+      <q-splitter v-model="splitterModel">
+        <template v-slot:before>
+          <q-page>
+            <div
+              class="q-pa-sm"
+              style="
+                height: 10px;
+                min-height: inherit;
+                border: 1px solid red;
+                overflow: auto;
+              "
+              visible
+            >
+              <div @contextmenu="showNodeSelected">TEST</div>
+              <div class="q-pa-md">
+                <button v-on:click="showNodeSelected">showClickedNode</button>
+                <div class="tree-wrapper">
+                  <q-tree
+                    :nodes="customize"
+                    :duration="100"
+                    node-key="label"
+                    default-expand-all
+                    ref="mytree"
+                  >
+                    <template v-slot:header-generic="prop">
+                      <div
+                        class="row items-center no-wrap"
+                        :id="prop.node.myid"
+                        @contextmenu="miketest"
+                        @click="mikeclick"
+                        @doubleclick="mikedouble"
+                      >
+                        <q-icon
+                          :name="prop.node.icon || 'star'"
+                          :color="prop.node.iconcolor || 'orange'"
+                          class="icon-common"
+                        />
                         <div class="node-common">{{ prop.node.label }}</div>
-                      </template>
+                      </div>
+                    </template>
 
-                      <template v-slot:body-story="prop">
-                        <span class="row items-center text-weight-thin" :id="prop.node.myid" @contextmenu="miketest">The story is: {{ prop.node.story }}</span>
-                      </template>
+                    <template v-slot:default-header="prop">
+                      <div class="node-common">{{ prop.node.label }}</div>
+                    </template>
 
+                    <template v-slot:body-story="prop">
+                      <span
+                        class="row items-center"
+                        :id="prop.node.myid"
+                        @contextmenu="miketest"
+                        >The story is: {{ prop.node.story }}</span
+                      >
+                    </template>
                   </q-tree>
                 </div>
-                </div>
+              </div>
             </div>
-        </q-page>
-      </template>
+          </q-page>
+        </template>
 
-      <template v-slot:after>
-        <q-page style="background-color:white;">
+        <template v-slot:after>
+          <q-page style="background-color: white;">
             <q-splitter
-      v-model="splitterModel2"
-      :limits="[0, Infinity]"
-      :horizontal = "splitterOrientation"
-      style="height: 10px;min-height:inherit;"
-    >
-
-      <template v-slot:before>
-        <div class="q-pa-md">
-          <div class="text-h4 q-mb-md">Before</div>
-          <div>
-            <q-img src="../assets/TreeSectionCallouts.png" style="width:443px;height:253px;" />
-          </div>
-          <q-card class="config-card">
-            <q-card-section>
-              <div class="text-h6"><q-img src="../assets/callout1.png" style="width:40px;height:40px;margin-right:7px;" />Arrow</div>
-            </q-card-section>
-
-            <q-separator />
-
-            <q-card-actions vertical>
-              <div>Arrow Color</div>
-              <q-input
-                filled
-                v-model="arrowColor"
-                class="my-input"
-                dense
-                @change="setArrowColorFromText"
-              >
-                <template v-slot:append>
-                  <q-icon name="colorize" class="cursor-pointer">
-                    <q-popup-proxy transition-show="scale" transition-hide="scale">
-                      <q-color
-                        v-model="arrowColor"
-                        @change="val => { setArrowColor (val) }"
-                      />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-              <div style="border-top:1px solid lightgray;margin-top:8px;">Arrow Size ({{arrowSize}}px)</div>
-              <q-slider
-                v-model="arrowSize"
-                :min="1"
-                :max="50"
-                @input="val => { setArrowSize (val) }"
-              />
-            </q-card-actions>
-          </q-card>
-        </div>
-      </template>
-
-      <template v-slot:after>
-        <div class="q-pa-md">
-          <div class="text-h4 q-mb-md">After</div>
-          <q-btn color="purple" label="Account Settings">
-            <q-menu>
-              <div class="row no-wrap q-pa-md">
-                <q-color
-                  v-model="hexStory"
-                  class="my-picker"
-                  style="width:100px; !important"
-                  @change="val => { setStoryColor (val) }"
-                 />
-              </div>
-            </q-menu>
-          </q-btn>
-          <q-btn color="purple" label="Account Settings">
-            <q-menu>
-              <div class="row no-wrap q-pa-md">
-                <q-color
-                  v-model="hexNode"
-                  class="my-picker"
-                  style="width:100px; !important"
-                  @change="setNodeColor"
-                 />
-              </div>
-            </q-menu>
-          </q-btn>
-          <q-btn color="purple" label="Font Settings">
-            <q-menu>
-              <div class="row no-wrap q-pa-md">
-                <q-select
-                  filled
-                  v-model="model"
-                  :options="options"
-                  label="Font Family"
-                  color="teal"
-                  clearable
-                  options-selected-class="text-deep-orange"
-                  ref="nodeFontSelector"
-                  @input="setNodeFontFamily"
-                >
-                  <template v-slot:option="scope">
-                    <q-item
-                      v-bind="scope.itemProps"
-                      v-on="scope.itemEvents"
+              v-model="splitterModel2"
+              :limits="[0, Infinity]"
+              :horizontal="splitterOrientation"
+              style="height: 10px; min-height: inherit;"
+            >
+              <template v-slot:before>
+                <div class="q-pa-md">
+                  <div class="text-h4 q-mb-md">Before</div>
+                  <button v-on:click="addStyle">Add Style</button>
+                  <div>
+                    <q-img
+                      src="/statics/TreeSectionCallouts-sm.png"
+                      style="width: 250px; height: 142px;"
+                    />
+                    <q-stepper
+                      v-model="step"
+                      header-nav
+                      ref="stepper"
+                      color="primary"
+                      animated
                     >
-                      <q-item-section>
-                        <q-item-label v-html="scope.opt.label" :style="scope.opt.labelstyle" />
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
-              </div>
-            </q-menu>
-          </q-btn>
-          <q-slider
-            v-model="standard"
-            :min="1"
-            :max="20"
-            style="max-width:200px;"
-            @input="val => { testSlider (val) }"
-           />
-           <q-input
-              v-model="text"
-              filled
-              type="textarea"
-            />
-          <div v-for="n in 20" :key="n" class="q-my-md">{{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</div>
-        </div>
-      </template>
+                      <q-step
+                        :name="1"
+                        title="Arrow"
+                        icon="img:/statics/callout1off.png"
+                        active-icon="img:/statics/callout1.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div>Arrow Color</div>
+                            <q-input
+                              filled
+                              v-model="arrowColor"
+                              class="my-input"
+                              dense
+                              @change="setArrowColorFromText"
+                            >
+                              <template v-slot:append>
+                                <q-icon name="colorize" class="cursor-pointer">
+                                  <q-popup-proxy
+                                    transition-show="scale"
+                                    transition-hide="scale"
+                                  >
+                                    <q-color
+                                      v-model="arrowColor"
+                                      @change="
+                                        (val) => {
+                                          setArrowColor(val)
+                                        }
+                                      "
+                                    />
+                                  </q-popup-proxy>
+                                </q-icon>
+                              </template>
+                            </q-input>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Arrow Size ({{ arrowSize }}px)</div>
+                              <q-slider
+                                v-model="arrowSize"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setArrowSize(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Arrow Left Margin ({{ arrowLeftMargin }}px)</div>
+                              <q-slider
+                                v-model="arrowLeftMargin"
+                                :min="-25"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setArrowLeftMargin(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </q-step>
 
-    </q-splitter>
-        </q-page>
-      </template>
-    </q-splitter>
+                      <q-step
+                        :name="2"
+                        title="Icon"
+                        icon="img:/statics/callout2off.png"
+                        active-icon="img:/statics/callout2.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Icon Color</div>
+                              <q-input
+                                filled
+                                v-model="iconColor"
+                                class="my-input"
+                                dense
+                                @change="setIconColorFromText"
+                              >
+                                <template v-slot:append>
+                                  <q-icon
+                                    name="colorize"
+                                    class="cursor-pointer"
+                                  >
+                                    <q-popup-proxy
+                                      transition-show="scale"
+                                      transition-hide="scale"
+                                    >
+                                      <q-color
+                                        v-model="iconColor"
+                                        @change="
+                                          (val) => {
+                                            setIconColor(val)
+                                          }
+                                        "
+                                      />
+                                    </q-popup-proxy>
+                                  </q-icon>
+                                </template>
+                              </q-input>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Icon Size ({{ iconSize }}px)</div>
+                              <q-slider
+                                v-model="iconSize"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setIconSize(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>
+                                Icon Bottom Padding ({{ iconBottomPadding }}px)
+                              </div>
+                              <q-slider
+                                v-model="iconBottomPadding"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setIconBottomPadding(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>
+                                Icon Margin Right ({{ iconMarginRight }}px)
+                              </div>
+                              <q-slider
+                                v-model="iconMarginRight"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setIconMarginRight(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col"></div>
+                          <div class="col"></div>
+                        </div>
+                      </q-step>
+
+                      <q-step
+                        :name="3"
+                        title="Node"
+                        icon="img:/statics/callout3off.png"
+                        active-icon="img:/statics/callout3.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Color</div>
+                              <q-input
+                                filled
+                                v-model="nodeColor"
+                                class="my-input"
+                                dense
+                                @change="setNodeColorFromText"
+                              >
+                                <template v-slot:append>
+                                  <q-icon
+                                    name="colorize"
+                                    class="cursor-pointer"
+                                  >
+                                    <q-popup-proxy
+                                      transition-show="scale"
+                                      transition-hide="scale"
+                                    >
+                                      <q-color
+                                        v-model="nodeColor"
+                                        @change="
+                                          (val) => {
+                                            setNodeColor(val)
+                                          }
+                                        "
+                                      />
+                                    </q-popup-proxy>
+                                  </q-icon>
+                                </template>
+                              </q-input>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Font Family</div>
+                              <q-select
+                                filled
+                                v-model="nodeFontModel"
+                                :options="options"
+                                label="Font Family"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="nodeFontSelector"
+                                @input="setNodeFontFamily"
+                              >
+                                <template v-slot:option="scope">
+                                  <q-item
+                                    v-bind="scope.itemProps"
+                                    v-on="scope.itemEvents"
+                                  >
+                                    <q-item-section>
+                                      <q-item-label
+                                        v-html="scope.opt.label"
+                                        :style="scope.opt.labelstyle"
+                                      />
+                                    </q-item-section>
+                                  </q-item>
+                                </template>
+                              </q-select>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Font Size ({{ nodeFontSize }}px)</div>
+                              <q-slider
+                                v-model="nodeFontSize"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setNodeFontSize(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Margin Top ({{ nodeMarginTop }}px)</div>
+                              <q-slider
+                                v-model="nodeMarginTop"
+                                :min="1"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setNodeMarginTop(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Padding ({{ nodePadding }}px)</div>
+                              <q-slider
+                                v-model="nodePadding"
+                                :min="1"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setNodePadding(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Font Weight</div>
+                              <q-select
+                                filled
+                                v-model="nodeFontWeightModel"
+                                :options="nodeFontWeightOptions"
+                                label="Font Weight"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="nodeFontWeightSelector"
+                                @input="setNodeFontWeight"
+                              >
+                                <template v-slot:option="scope">
+                                  <q-item
+                                    v-bind="scope.itemProps"
+                                    v-on="scope.itemEvents"
+                                  >
+                                    <q-item-section>
+                                      <q-item-label
+                                        v-html="scope.opt.label"
+                                        :style="scope.opt.labelstyle"
+                                      />
+                                    </q-item-section>
+                                  </q-item>
+                                </template>
+                              </q-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Node Wrap</div>
+                              <q-btn-toggle
+                                v-model="nodeWrapModel"
+                                class="my-custom-toggle"
+                                no-caps
+                                rounded
+                                unelevated
+                                toggle-color="primary"
+                                color="white"
+                                text-color="primary"
+                                :options="[
+                                  { label: 'Nowrap', value: 'nowrap' },
+                                  { label: 'Wrap', value: 'wrap' },
+                                ]"
+                                @input="
+                                  (val) => {
+                                    setNodeWrap(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col"></div>
+                          <div class="col"></div>
+                        </div>
+                      </q-step>
+
+                      <q-step
+                        :name="4"
+                        title="Story"
+                        icon="img:/statics/callout4off.png"
+                        active-icon="img:/statics/callout4.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        <q-step
+                        :name="4"
+                        title="Story"
+                        icon="img:/statics/callout4off.png"
+                        active-icon="img:/statics/callout4.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done4"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Color</div>
+                              <q-input
+                                filled
+                                v-model="storyColor"
+                                class="my-input"
+                                dense
+                                @change="setStoryColorFromText"
+                              >
+                                <template v-slot:append>
+                                  <q-icon
+                                    name="colorize"
+                                    class="cursor-pointer"
+                                  >
+                                    <q-popup-proxy
+                                      transition-show="scale"
+                                      transition-hide="scale"
+                                    >
+                                      <q-color
+                                        v-model="nodeColor"
+                                        @change="
+                                          (val) => {
+                                            setStoryColor(val)
+                                          }
+                                        "
+                                      />
+                                    </q-popup-proxy>
+                                  </q-icon>
+                                </template>
+                              </q-input>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Font Family</div>
+                              <q-select
+                                filled
+                                v-model="storyFontModel"
+                                :options="options"
+                                label="Font Family"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="storyFontSelector"
+                                @input="setStoryFontFamily"
+                              >
+                                <template v-slot:option="scope">
+                                  <q-item
+                                    v-bind="scope.itemProps"
+                                    v-on="scope.itemEvents"
+                                  >
+                                    <q-item-section>
+                                      <q-item-label
+                                        v-html="scope.opt.label"
+                                        :style="scope.opt.labelstyle"
+                                      />
+                                    </q-item-section>
+                                  </q-item>
+                                </template>
+                              </q-select>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Font Size ({{ storyFontSize }}px)</div>
+                              <q-slider
+                                v-model="storyFontSize"
+                                :min="1"
+                                :max="50"
+                                @input="
+                                  (val) => {
+                                    setStoryFontSize(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Font Weight</div>
+                              <q-select
+                                filled
+                                v-model="storyFontWeightModel"
+                                :options="nodeFontWeightOptions"
+                                label="Font Weight"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="storyFontWeightSelector"
+                                @input="setStoryFontWeight"
+                              >
+                                <template v-slot:option="scope">
+                                  <q-item
+                                    v-bind="scope.itemProps"
+                                    v-on="scope.itemEvents"
+                                  >
+                                    <q-item-section>
+                                      <q-item-label
+                                        v-html="scope.opt.label"
+                                        :style="scope.opt.labelstyle"
+                                      />
+                                    </q-item-section>
+                                  </q-item>
+                                </template>
+                              </q-select>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Wrap</div>
+                              <q-btn-toggle
+                                v-model="storyWrapModel"
+                                class="my-custom-toggle"
+                                no-caps
+                                rounded
+                                unelevated
+                                toggle-color="primary"
+                                color="white"
+                                text-color="primary"
+                                :options="[
+                                  { label: 'Nowrap', value: 'nowrap' },
+                                  { label: 'Wrap', value: 'wrap' },
+                                ]"
+                                @input="
+                                  (val) => {
+                                    setStoryWrap(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Story Padding Top ({{ storyPaddingTop }}px)</div>
+                              <q-slider
+                                v-model="storyPaddingTop"
+                                :min="1"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setStoryPaddingTop(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+							<div class="tree-param">
+                              <div>Story Padding Bottom ({{ storyPaddingBottom }}px)</div>
+                              <q-slider
+                                v-model="storyPaddingBottom"
+                                :min="1"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setStoryPaddingBottom(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+							<div class="tree-param">
+                              <div>Story Padding Left ({{ storyPaddingLeft }}px)</div>
+                              <q-slider
+                                v-model="storyPaddingLeft"
+                                :min="1"
+                                :max="25"
+                                @input="
+                                  (val) => {
+                                    setStoryPaddingLeft(val)
+                                  }
+                                "
+                              />
+                            </div>
+						  </div>
+                          <div class="col">
+
+						  </div>
+                        </div>
+                      </q-step>
+                      </q-step>
+
+                      <q-step
+                        :name="5"
+                        title="Vertical Connector"
+                        icon="img:/statics/callout5off.png"
+                        active-icon="img:/statics/callout5.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div>Verticval Connector Color</div>
+                            <q-input
+                              filled
+                              v-model="verticalConnectorColor"
+                              class="my-input"
+                              dense
+                              @change="setVerticalConnectorColorFromText"
+                            >
+                              <template v-slot:append>
+                                <q-icon name="colorize" class="cursor-pointer">
+                                  <q-popup-proxy
+                                    transition-show="scale"
+                                    transition-hide="scale"
+                                  >
+                                    <q-color
+                                      v-model="verticalConnectorColor"
+                                      @change="
+                                        (val) => {
+                                          setVerticalConnectorColor(val)
+                                        }
+                                      "
+                                    />
+                                  </q-popup-proxy>
+                                </q-icon>
+                              </template>
+                            </q-input>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Vertical Connector Size ({{ verticalConnectorSize }}px)</div>
+                              <q-slider
+                                v-model="verticalConnectorSize"
+                                :min="1"
+                                :max="20"
+                                @input="
+                                  (val) => {
+                                    setVerticalConnectorSize(val)
+                                  }
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Vertical Connector Style</div>
+                              <q-select
+                                filled
+                                v-model="verticalConnectorStyleModel"
+                                :options="connectorOptions"
+                                label="Style"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="verticalConnectorStyleSelector"
+                                @input="setVerticalConnectorStyle"
+                              >
+                                <template v-slot:option="scope">
+                                  <q-item
+                                    v-bind="scope.itemProps"
+                                    v-on="scope.itemEvents"
+                                  >
+                                    <q-item-section>
+                                      <q-item-label
+                                        v-html="scope.opt.label"
+                                        :style="scope.opt.labelstyle"
+                                      />
+                                    </q-item-section>
+                                  </q-item>
+                                </template>
+                              </q-select>
+                            </div>
+                          </div>
+                        </div>
+                      </q-step>
+
+                      <q-step
+                        :name="6"
+                        title="Horizontal Connector"
+                        icon="img:/statics/callout6off.png"
+                        active-icon="img:/statics/callout6.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                        For each ad campaign that you create, you can control
+                        how much you're willing to spend on clicks and
+                        conversions, which networks and geographical locations
+                        you want your ads to show on, and more.
+                      </q-step>
+                    </q-stepper>
+                  </div>
+                </div>
+              </template>
+
+              <template v-slot:after>
+                <div class="q-pa-md">
+                  <div class="text-h4 q-mb-md">After</div>
+                  <q-btn color="purple" label="Account Settings">
+                    <q-menu>
+                      <div class="row no-wrap q-pa-md">
+                        <q-color
+                          v-model="hexStory"
+                          class="my-picker"
+                          style="width:100px; !important"
+                          @change="
+                            (val) => {
+                              setStoryColor(val)
+                            }
+                          "
+                        />
+                      </div>
+                    </q-menu>
+                  </q-btn>
+                  <q-btn color="purple" label="Account Settings">
+                    <q-menu>
+                      <div class="row no-wrap q-pa-md">
+                        <q-color
+                          v-model="hexNode"
+                          class="my-picker"
+                          style="width:100px; !important"
+                          @change="setNodeColor"
+                        />
+                      </div>
+                    </q-menu>
+                  </q-btn>
+                  <q-btn color="purple" label="Font Settings">
+                    <q-menu>
+                      <div class="row no-wrap q-pa-md"></div>
+                    </q-menu>
+                  </q-btn>
+                  <q-slider
+                    v-model="standard"
+                    :min="1"
+                    :max="20"
+                    style="max-width: 200px;"
+                    @input="
+                      (val) => {
+                        testSlider(val)
+                      }
+                    "
+                  />
+                  <q-input v-model="text" filled type="textarea" />
+                  <div v-for="n in 20" :key="n" class="q-my-md">
+                    {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing
+                    elit. Quis praesentium cumque magnam odio iure quidem, quod
+                    illum numquam possimus obcaecati commodi minima assumenda
+                    consectetur culpa fuga nulla ullam. In, libero.
+                  </div>
+                </div>
+              </template>
+            </q-splitter>
+          </q-page>
+        </template>
+      </q-splitter>
     </div>
   </div>
 </template>
@@ -204,10 +844,36 @@ export default {
       standard: 2,
       arrowColor: '#000000',
       arrowSize: 18,
+      arrowLeftMargin: 0,
+      iconColor: '#0000dd',
+      iconSize: 24,
+      iconBottomPadding: 8,
+      iconMarginRight: 8,
+      nodeColor: '#222222',
+      nodeFontSize: 14,
+      nodeMarginTop: 8,
+      nodePadding: 5,
+      nodeWrapModel: 'nowrap',
+      storyColor: '#222222',
+      storyFontSize: 14,
+      storyPaddingTop: 5,
+      storyPaddingRight: 1,
+      storyPaddingBottom: 8,
+      storyPaddingLeft: 5,
+      storyWrapModel: 'nowrap',
+      verticalConnectorColor: '#333333',
+      verticalConnectorSize: 1,
       hexStory: '#37997a',
       hexNode: '#37997a',
       splitterModel: 20, // start at 50%
-      splitterModel2: 50,
+      splitterModel2: 90,
+      step: 1,
+      done1: false,
+      done2: false,
+      done3: false,
+      done4: false,
+      done5: false,
+      done6: false,
       customize: [
         {
           label: 'Good food',
@@ -219,15 +885,15 @@ export default {
             {
               label: 'Quality ingredients',
               body: 'story',
-              story: 'Our ingredients are sourced locally.'
+              story: 'Our ingredients are sourced locally.',
             },
             {
               label: 'Good recipe',
               body: 'story',
               story: 'Secret family recipes that everyone loves!',
-              myid: 'mifo1'
-            }
-          ]
+              myid: 'mifo1',
+            },
+          ],
         },
         {
           label: 'Good service',
@@ -241,11 +907,11 @@ export default {
               label: 'Prompt attention',
               children: [
                 { label: 'child node one' },
-                { label: 'child node two' }
-              ]
+                { label: 'child node two' },
+              ],
             },
-            { label: 'Professional waiter' }
-          ]
+            { label: 'Professional waiter' },
+          ],
         },
         {
           label: 'Pleasant surroundings',
@@ -253,126 +919,194 @@ export default {
           children: [
             { label: 'Happy atmosphere' },
             { label: 'Good table presentation', header: 'generic' },
-            { label: 'Pleasing decor' }
-          ]
-        }
+            { label: 'Pleasing decor' },
+          ],
+        },
       ],
-      model: null,
+      nodeFontModel: 'Arial, Helvetica, sans-serif',
+      storyFontModel: 'Arial, Helvetica, sans-serif',
       options: [
         {
           label: 'Arial, Helvetica, sans-serif',
           labelstyle: 'font-family: Arial, Helvetica, sans-serif',
-          value: 'Arial, Helvetica, sans-serif'
+          value: 'Arial, Helvetica, sans-serif',
         },
         {
           label: '"Arial Black", Gadget, sans-serif',
           labelstyle: 'font-family: "Arial Black", Gadget, sans-serif',
-          value: '"Arial Black", Gadget, sans-serif'
+          value: '"Arial Black", Gadget, sans-serif',
         },
         {
           label: '"Bookman Old Style", serif',
           labelstyle: 'font-family: "Bookman Old Style", serif',
-          value: '"Bookman Old Style", serif'
+          value: '"Bookman Old Style", serif',
         },
         {
           label: '"Comic Sans MS", cursive, sans-serif',
           labelstyle: 'font-family: "Comic Sans MS", cursive, sans-serif',
-          value: '"Comic Sans MS", cursive, sans-serif'
+          value: '"Comic Sans MS", cursive, sans-serif',
         },
         {
           label: 'Courier, monospace',
           labelstyle: 'font-family: Courier, monospace',
-          value: 'Courier, monospace'
+          value: 'Courier, monospace',
         },
         {
           label: '"Courier New", Courier, monospace',
           labelstyle: 'font-family: "Courier New", Courier, monospace',
-          value: '"Courier New", Courier, monospace'
+          value: '"Courier New", Courier, monospace',
         },
         {
           label: 'Garamond, serif',
           labelstyle: 'font-family: Garamond, serif',
-          value: 'Garamond, serif'
+          value: 'Garamond, serif',
         },
         {
           label: 'Georgia, serif',
           labelstyle: 'font-family: Georgia, serif',
-          value: 'Georgia, serif'
+          value: 'Georgia, serif',
         },
         {
           label: 'Impact, Charcoal, sans-serif',
           labelstyle: 'font-family: Impact, Charcoal, sans-serif',
-          value: 'Impact, Charcoal, sans-serif'
+          value: 'Impact, Charcoal, sans-serif',
         },
         {
           label: '"Lucida Console", Monaco, monospace',
           labelstyle: 'font-family: "Lucida Console", Monaco, monospace',
-          value: '"Lucida Console", Monaco, monospace'
+          value: '"Lucida Console", Monaco, monospace',
         },
         {
           label: '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
-          labelstyle: 'font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif',
-          value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif'
+          labelstyle:
+            'font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif',
+          value: '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
         },
         {
           label: '"MS Sans Serif", Geneva, sans-serif',
           labelstyle: 'font-family: "MS Sans Serif", Geneva, sans-serif',
-          value: '"MS Sans Serif", Geneva, sans-serif'
+          value: '"MS Sans Serif", Geneva, sans-serif',
         },
         {
           label: '"MS Serif", "New York", sans-serif',
           labelstyle: 'font-family: "MS Serif", "New York", sans-serif',
-          value: '"MS Serif", "New York", sans-serif'
+          value: '"MS Serif", "New York", sans-serif',
         },
         {
           label: '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-          labelstyle: 'font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif',
-          value: '"Palatino Linotype", "Book Antiqua", Palatino, serif'
+          labelstyle:
+            'font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif',
+          value: '"Palatino Linotype", "Book Antiqua", Palatino, serif',
         },
         {
           label: 'Symbol, sans-serif',
           labelstyle: 'font-family: Symbol, sans-serif',
-          value: 'Symbol, sans-serif'
+          value: 'Symbol, sans-serif',
         },
         {
           label: 'Tahoma, Geneva, sans-serif',
           labelstyle: 'font-family: Tahoma, Geneva, sans-serif',
-          value: 'Tahoma, Geneva, sans-serif'
+          value: 'Tahoma, Geneva, sans-serif',
         },
         {
           label: '"Times New Roman", Times, serif',
           labelstyle: 'font-family: "Times New Roman", Times, serif',
-          value: '"Times New Roman", Times, serif'
+          value: '"Times New Roman", Times, serif',
         },
         {
           label: '"Trebuchet MS", Helvetica, sans-serif',
           labelstyle: 'font-family: "Trebuchet MS", Helvetica, sans-serif',
-          value: '"Trebuchet MS", Helvetica, sans-serif'
+          value: '"Trebuchet MS", Helvetica, sans-serif',
         },
         {
           label: 'Verdana, Geneva, sans-serif',
           labelstyle: 'font-family: Verdana, Geneva, sans-serif',
-          value: 'Verdana, Geneva, sans-serif'
+          value: 'Verdana, Geneva, sans-serif',
         },
         {
           label: 'Webdings, sans-serif',
           labelstyle: 'font-family: Webdings, sans-serif',
-          value: 'Webdings, sans-serif'
+          value: 'Webdings, sans-serif',
         },
         {
           label: 'Wingdings, "Zapf Dingbats", sans-serif',
           labelstyle: 'font-family: Wingdings, "Zapf Dingbats", sans-serif',
-          value: 'Wingdings, "Zapf Dingbats", sans-serif'
+          value: 'Wingdings, "Zapf Dingbats", sans-serif',
+        },
+      ],
+      nodeFontWeightModel: 400,
+      storyFontWeightModel: 400,
+      nodeFontWeightOptions: [
+        {
+          label: '100',
+          value: '100',
+        },
+        {
+          label: '200',
+          value: '200',
+        },
+        {
+          label: '300',
+          value: '300',
+        },
+        {
+          label: '400',
+          value: '400',
+        },
+        {
+          label: '500',
+          value: '500',
+        },
+        {
+          label: '600',
+          value: '600',
+        },
+        {
+          label: '700',
+          value: '700',
+        },
+        {
+          label: '800',
+          value: '800',
+        },
+        {
+          label: '900',
+          value: '900',
+        },
+      ],
+      verticalConnectorStyleModel: 'solid',
+      connectorOptions: [
+        {
+          label: 'solid',
+          value: 'solid',
+        },
+        {
+          label: 'dotted',
+          value: 'dotted',
+        },
+        {
+          label: 'dashed',
+          value: 'dashed',
+        },
+        {
+          label: 'double',
+          value: 'double',
         }
       ],
       onclick (node) {
         alert(node.label)
-      }
+      },
     }
   },
   methods: {
     showNodeSelected: function () {
       this.$refs.mytree.setExpanded('Good food', false)
+    },
+    addStyle: function () {
+      console.log('add style')
+      const style = document.createElement('style')
+      style.textContent = '.q-tree__node::after {border-left:5px dotted blue !important;} .q-tree__node-header::before {border-left:5px dotted blue !important;}'
+      document.head.append(style)
     },
     miketest: function () {
       event.preventDefault()
@@ -390,36 +1124,212 @@ export default {
       console.log('DOUBLEclick: ' + event.currentTarget.id)
       // JSON.stringify(this)
     },
-    setStoryColor: function (newColor) {
+    setStoryColorold: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__node-body')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--story-color', newColor) })
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-color', newColor)
+      })
     },
     setArrowColor: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__arrow')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-color', newColor) })
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--arrow-color', newColor)
+      })
+    },
+    setArrowColorFromText: function (e) {
+      const titems = document.querySelectorAll('.q-tree__arrow')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--arrow-color', e.target.value)
+      })
     },
     setArrowSize: function (newSize) {
       const titems = document.querySelectorAll('.q-tree__arrow')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-size', newSize + 'px') })
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--arrow-size', newSize + 'px')
+      })
     },
-    setArrowColorFromText: function (e) {
-      console.log('TEST')
+    setArrowLeftMargin: function (newSize) {
       const titems = document.querySelectorAll('.q-tree__arrow')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--arrow-color', e.target.value) })
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--arrow-margin', newSize + 'px')
+      })
+    },
+    setIconColor: function (newColor) {
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--icon-color', newColor)
+      })
+    },
+    setIconColorFromText: function (e) {
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--icon-color', e.target.value)
+      })
+    },
+    setIconSize: function (newSize) {
+      console.log('test icon size')
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--icon-size', newSize + 'px')
+      })
+    },
+    setIconBottomPadding: function (newSize) {
+      console.log('test icon size')
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--icon-padding-bottom', newSize + 'px')
+      })
+    },
+    setIconMarginRight: function (newSize) {
+      console.log('test icon size')
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--icon-margin-right', newSize + 'px')
+      })
+    },
+    setNodeColorOld: function (newColor) {
+      const titems = document.querySelectorAll('.q-tree__node')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-color', newColor)
+      })
     },
     setNodeColor: function (newColor) {
       const titems = document.querySelectorAll('.q-tree__node')
-      titems.forEach(function (userItem) { userItem.style.setProperty('--node-color', newColor) })
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-color', newColor)
+      })
+    },
+    setNodeColorFromText: function (e) {
+      const titems = document.querySelectorAll('.q-tree__node')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-color', e.target.value)
+      })
     },
     setNodeFontFamily: function (newFontFace) {
       // console.log('SET FONT: ' + this.model.value)
-      if (this.model !== null) {
-        const newFontFamily = this.model.value
+      if (this.nodeFontModel !== null) {
+        const newFontFamily = this.nodeFontModel.value
         if (newFontFamily !== null) {
           const titems = document.querySelectorAll('.node-common')
-          titems.forEach(function (userItem) { userItem.style.setProperty('--node-font-family', newFontFamily) })
+          titems.forEach(function (userItem) {
+            userItem.style.setProperty('--node-font-family', newFontFamily)
+          })
         }
       }
+    },
+    setNodeFontSize: function (newSize) {
+      const titems = document.querySelectorAll('.node-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-font-size', newSize + 'px')
+      })
+    },
+    setNodeFontWeight: function (newFontWeight) {
+      // console.log('SET FONT: ' + this.model.value)
+      if (this.nodeFontWeightModel !== null) {
+        const newFontWeight = this.nodeFontWeightModel.value
+        if (newFontWeight !== null) {
+          const titems = document.querySelectorAll('.node-common')
+          titems.forEach(function (userItem) {
+            userItem.style.setProperty('--node-font-weight', newFontWeight)
+          })
+        }
+      }
+    },
+    setNodeMarginTop: function (newMargin) {
+      const titems = document.querySelectorAll('.q-tree__node-header')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-margin-top', newMargin + 'px')
+      })
+    },
+    setNodePadding: function (newPadding) {
+      const titems = document.querySelectorAll('.q-tree__node-header')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-padding', newPadding + 'px')
+      })
+    },
+    setNodeWrap: function (wrap) {
+      const titems = document.querySelectorAll('.node-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--node-wrap', wrap)
+      })
+    },
+    setStoryColor: function (newColor) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-color', newColor)
+      })
+    },
+    setStoryColorFromText: function (e) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-color', e.target.value)
+      })
+    },
+    setStoryFontFamily: function (newFontFace) {
+      // console.log('SET FONT: ' + this.model.value)
+      if (this.storyFontModel !== null) {
+        const newFontFamily = this.storyFontModel.value
+        if (newFontFamily !== null) {
+          const titems = document.querySelectorAll('.q-tree__node-body')
+          titems.forEach(function (userItem) {
+            userItem.style.setProperty('--story-font-family', newFontFamily)
+          })
+        }
+      }
+    },
+    setStoryFontSize: function (newSize) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-font-size', newSize + 'px')
+      })
+    },
+    setStoryFontWeight: function (newFontWeight) {
+      console.log('SET WEIGHT: ' + this.storyFontWeightModel.value)
+      if (this.storyFontWeightModel !== null) {
+        const newFontWeight = this.storyFontWeightModel.value
+        if (newFontWeight !== null) {
+          const titems = document.querySelectorAll('.q-tree__node-body')
+          titems.forEach(function (userItem) {
+            userItem.style.setProperty('--story-font-weight', newFontWeight)
+          })
+        }
+      }
+    },
+    setStoryPaddingTop: function (newPadding) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-padding-top', newPadding + 'px')
+      })
+    },
+	setStoryPaddingBottom: function (newPadding) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-padding-bottom', newPadding + 'px')
+      })
+    },
+	setStoryPaddingLeft: function (newPadding) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-padding-left', newPadding + 'px')
+      })
+    },
+    setStoryWrap: function (wrap) {
+      const titems = document.querySelectorAll('.q-tree__node-body')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--story-wrap', wrap)
+      })
+    },
+    setVerticalConnectorColor: function (newColor) {
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--vert-color', newColor)
+      })
+    },
+    setverticalConnectorColorFromText: function (e) {
+      const titems = document.querySelectorAll('.icon-common')
+      titems.forEach(function (userItem) {
+        userItem.style.setProperty('--vert-color', e.target.value)
+      })
     },
     testSlider: function (newVal) {
       console.log('testslider: ' + newVal)
@@ -427,8 +1337,8 @@ export default {
       this.text = codetemplate
       // const newSliderValue = this.model.standard
       // console.log('NEW VAL: ' + newSliderValue)
-    }
-  }
+    },
+  },
 }
 // function decycle (obj, stack = []) {
 //   if (!obj || typeof obj !== 'object') {
