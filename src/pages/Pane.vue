@@ -97,17 +97,28 @@
                 <div class="q-pa-md">
                   <div class="text-h4 q-mb-md">Before</div>
                   <button v-on:click="addStyle">Add Style</button>
+                  <button v-on:click="removeStyle">Remove Style</button>
                   <div>
-                    <q-img
-                      src="/statics/TreeSectionCallouts-sm.png"
-                      style="width: 250px; height: 142px;"
-                    />
+                    <div style="display:inline-block;vertical-align:top;">
+                      <q-img
+                        src="/statics/TreeSectionCallouts-sm2.png"
+                        style="width: 300px; height: 150px;"
+                      />
+                    </div>
+                    <div class="col" style="display:inline-block;border:1px solid red;vertical-align:top;margin-left:18px;">
+                      <p>This is text</p>
+                      <p>This is more text</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    
                     <q-stepper
                       v-model="step"
                       header-nav
                       ref="stepper"
                       color="primary"
                       animated
+                      style="margin-top:18px;"
                     >
                       <q-step
                         :name="1"
@@ -673,14 +684,14 @@
                         :done="done1"
                       >
                         <div class="row">
-                          <div class="col">
-                            <div>Verticval Connector Color</div>
+                          <div class="col tree-param">
+                            <div>Vertical Connector Color</div>
                             <q-input
                               filled
                               v-model="verticalConnectorColor"
                               class="my-input"
                               dense
-                              @change="setVerticalConnectorColorFromText"
+                              @change="buildVerticalConnectorStyle"
                             >
                               <template v-slot:append>
                                 <q-icon name="colorize" class="cursor-pointer">
@@ -691,9 +702,7 @@
                                     <q-color
                                       v-model="verticalConnectorColor"
                                       @change="
-                                        (val) => {
-                                          setVerticalConnectorColor(val)
-                                        }
+                                        buildVerticalConnectorStyle
                                       "
                                     />
                                   </q-popup-proxy>
@@ -709,9 +718,7 @@
                                 :min="1"
                                 :max="20"
                                 @input="
-                                  (val) => {
-                                    setVerticalConnectorSize(val)
-                                  }
+                                  buildVerticalConnectorStyle()
                                 "
                               />
                             </div>
@@ -727,21 +734,8 @@
                                 color="teal"
                                 options-selected-class="text-deep-orange"
                                 ref="verticalConnectorStyleSelector"
-                                @input="setVerticalConnectorStyle"
+                                @input="buildVerticalConnectorStyle"
                               >
-                                <template v-slot:option="scope">
-                                  <q-item
-                                    v-bind="scope.itemProps"
-                                    v-on="scope.itemEvents"
-                                  >
-                                    <q-item-section>
-                                      <q-item-label
-                                        v-html="scope.opt.label"
-                                        :style="scope.opt.labelstyle"
-                                      />
-                                    </q-item-section>
-                                  </q-item>
-                                </template>
                               </q-select>
                             </div>
                           </div>
@@ -757,10 +751,149 @@
                         active-color="ff7d06"
                         :done="done1"
                       >
-                        For each ad campaign that you create, you can control
-                        how much you're willing to spend on clicks and
-                        conversions, which networks and geographical locations
-                        you want your ads to show on, and more.
+                        <div class="row">
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Horizontal Connector Size ({{ horizontalConnectorSize }}px)</div>
+                              <q-slider
+                                v-model="horizontalConnectorSize"
+                                :min="1"
+                                :max="20"
+                                @input="
+                                  buildHorizontalConnectorStyle()
+                                "
+                              />
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div>Horizontal Connector Color</div>
+                            <q-input
+                              filled
+                              v-model="horizontalConnectorColor"
+                              class="my-input"
+                              dense
+                              @change="buildHorizontalConnectorStyle"
+                            >
+                              <template v-slot:append>
+                                <q-icon name="colorize" class="cursor-pointer">
+                                  <q-popup-proxy
+                                    transition-show="scale"
+                                    transition-hide="scale"
+                                  >
+                                    <q-color
+                                      v-model="horizontalConnectorColor"
+                                      @change="
+                                        buildHorizontalConnectorStyle
+                                      "
+                                    />
+                                  </q-popup-proxy>
+                                </q-icon>
+                              </template>
+                            </q-input>
+                          </div>
+                          <div class="col">
+                            <div class="tree-param">
+                              <div>Horizontal Connector Style</div>
+                              <q-select
+                                filled
+                                v-model="horizontalConnectorStyleModel"
+                                :options="connectorOptions"
+                                label="Style"
+                                color="teal"
+                                options-selected-class="text-deep-orange"
+                                ref="horizontalConnectorStyleSelector"
+                                @input="buildHorizontalConnectorStyle"
+                              >
+                              </q-select>
+                            </div>
+                          </div>
+                        </div>
+						<div class="row">
+							<div class="col">
+								<div class="tree-param">
+                              <div>Horizontal Connector Width ({{ horizontalConnectorWidth }}px)</div>
+                              <q-slider
+                                v-model="horizontalConnectorWidth"
+                                :min="13"
+                                :max="100"
+                                @input="
+                                  buildHorizontalConnectorStyle()
+                                "
+                              />
+                            </div>
+							</div>
+							<div class="col">
+								
+							</div>
+							<div class="col">
+								
+							</div>
+						</div>
+                      </q-step>
+                      <q-step
+                        :name="7"
+                        title="Copy Code"
+                        icon="img:/statics/callout7off.png"
+                        active-icon="img:/statics/callout7.png"
+                        done-color="ff7d06"
+                        active-color="ff7d06"
+                        :done="done1"
+                      >
+                      <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+        >
+          <q-tab name="appscss" label="App.scss/sass Modification" />
+          <q-tab name="componenthtml" label="Component HTML" />
+          <q-tab name="copysass" label="SASS Code" />
+          <q-tab name="copyscss" label="SCSS Code" />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="appscss">
+            <div class="text-h6" style="margin-bottom:20px;"><div style="display:inline-block !important;vertical-align:middle;">App.scss/sass Modification</div><q-btn round color="orange-8" size="sm" icon="mdi-clipboard-multiple-outline" style="margin-left:18px;vertical-align:middle;display:inline:block;" v-on:click="copyTextboxToClipboard(textApscss)" /></div>
+            
+            
+    <div class="row">
+      <div class="col-10">
+<q-input
+      v-model="textApscss"
+      outlined
+      type="textarea"
+    />  
+      </div>
+      <div class="col-2">
+        
+      </div>
+      </div>
+    
+          </q-tab-panel>
+
+          <q-tab-panel name="componenthtml">
+            <div class="text-h6">Component HTML</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="copysass">
+            <div class="text-h6">SASS Code</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="copyscss">
+            <div class="text-h6">SCSS Code</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+        </q-tab-panels>
+
+
+                      
                       </q-step>
                     </q-stepper>
                   </div>
@@ -832,6 +965,7 @@
 </template>
 
 <script>
+import { copyToClipboard } from 'quasar'
 var codetemplatebase = `This is line 1: {mystandard}
 This is line 2
 This is line 3`
@@ -839,6 +973,10 @@ var codetemplate = codetemplatebase
 export default {
   data () {
     return {
+      tab: 'appscss',
+      textApscss: '',
+      hasTempStyle: false,
+      hasTempStyleHz: false,
       splitterOrientation: true,
       text: codetemplate,
       standard: 2,
@@ -863,6 +1001,9 @@ export default {
       storyWrapModel: 'nowrap',
       verticalConnectorColor: '#333333',
       verticalConnectorSize: 1,
+      horizontalConnectorColor: '#333333',
+      horizontalConnectorSize: 1,
+      horizontalConnectorWidth: 13,
       hexStory: '#37997a',
       hexNode: '#37997a',
       splitterModel: 20, // start at 50%
@@ -1075,24 +1216,8 @@ export default {
         },
       ],
       verticalConnectorStyleModel: 'solid',
-      connectorOptions: [
-        {
-          label: 'solid',
-          value: 'solid',
-        },
-        {
-          label: 'dotted',
-          value: 'dotted',
-        },
-        {
-          label: 'dashed',
-          value: 'dashed',
-        },
-        {
-          label: 'double',
-          value: 'double',
-        }
-      ],
+      horizontalConnectorStyleModel: 'solid',
+      connectorOptions: ['solid', 'dotted', 'dashed', 'double'],
       onclick (node) {
         alert(node.label)
       },
@@ -1103,10 +1228,18 @@ export default {
       this.$refs.mytree.setExpanded('Good food', false)
     },
     addStyle: function () {
-      console.log('add style')
+      this.hasTempStyle = true
       const style = document.createElement('style')
+      style.id = 'tempScriptTag'
       style.textContent = '.q-tree__node::after {border-left:5px dotted blue !important;} .q-tree__node-header::before {border-left:5px dotted blue !important;}'
       document.head.append(style)
+    },
+    removeStyle: function () {
+      if (this.hasTempStyle === true) {
+        this.hasTempStyle = false
+        const tempStyle = document.getElementById('tempScriptTag')
+        document.head.removeChild(tempStyle)
+      }
     },
     miketest: function () {
       event.preventDefault()
@@ -1325,11 +1458,70 @@ export default {
         userItem.style.setProperty('--vert-color', newColor)
       })
     },
-    setverticalConnectorColorFromText: function (e) {
-      const titems = document.querySelectorAll('.icon-common')
+    buildVerticalConnectorStyle: function () {
+      // verticalConnectorStyle
+      // console.log('color: ' + this.verticalConnectorColor + ' size: ' + this.verticalConnectorSize + ' model: ' + JSON.stringify(this.verticalConnectorStyleModel))
+      let tempColor = this.verticalConnectorColor
+      let tempSize = this.verticalConnectorSize
+      let tempStyle = this.verticalConnectorStyleModel
+      let tempStyleTemplate = `.q-tree__node::after {
+          border-left:${tempSize}px ${tempStyle} ${tempColor} !important;
+        } 
+        .q-tree__node-header::before {
+          border-left:${tempSize}px ${tempStyle} ${tempColor} !important;
+        }`
+      if (this.hasTempStyle === true) {
+        this.hasTempStyle = false
+        const tempStyle = document.getElementById('tempScriptTag')
+        document.head.removeChild(tempStyle)
+      }
+      this.hasTempStyle = true
+      const style = document.createElement('style')
+      style.id = 'tempScriptTag'
+      // style.textContent = '.q-tree__node::after {border-left:5px dotted blue !important;} .q-tree__node-header::before {border-left:5px dotted blue !important;}'
+      style.textContent = tempStyleTemplate
+      document.head.append(style)
+    },
+    buildHorizontalConnectorStyle: function () {
+      // verticalConnectorStyle
+      // console.log('color: ' + this.verticalConnectorColor + ' size: ' + this.verticalConnectorSize + ' model: ' + JSON.stringify(this.verticalConnectorStyleModel))
+      let tempColor = this.horizontalConnectorColor
+      let tempSize = this.horizontalConnectorSize
+      let tempWidth = this.horizontalConnectorWidth
+      let tempStyle = this.horizontalConnectorStyleModel
+      let tempPosition = tempWidth * -1
+      let tempPad = tempWidth - 13
+      // console.log('test' + tempPosition)
+      let tempStyleTemplate = `.q-tree__node-header::before {
+          border-bottom:${tempSize}px ${tempStyle} ${tempColor} !important;
+          width: ${tempWidth}px !important;
+          left: ${tempPosition}px !important;
+        }
+        .tree-wrapper .q-tree__node--parent {
+          padding-left: ${tempPad}px;
+          }`
+      if (this.hasTempStyleHz === true) {
+        this.hasTempStyleHz = false
+        const tempStyle = document.getElementById('tempScriptTagHz')
+        document.head.removeChild(tempStyle)
+      }
+      this.hasTempStyleHz = true
+      const style = document.createElement('style')
+      style.id = 'tempScriptTagHz'
+      // style.textContent = '.q-tree__node::after {border-left:5px dotted blue !important;} .q-tree__node-header::before {border-left:5px dotted blue !important;}'
+      style.textContent = tempStyleTemplate
+      document.head.append(style)
+      const titems = document.querySelectorAll('.q-tree__node--child')
       titems.forEach(function (userItem) {
-        userItem.style.setProperty('--vert-color', e.target.value)
+        userItem.style.setProperty('--node-padding-left', tempPad + 'px')
       })
+      // const titemslink = document.querySelectorAll('.q-tree__node--link')
+      // const titemslink = document.querySelectorAll('.tree-wrapper.q-tree__node--parent')
+      // console.log('BEGIN')
+      // titemslink.forEach(function (userItemLink) {
+      //  console.log(userItemLink.outerHTML)
+      //  userItemLink.style.setProperty('padding-left', tempPad + 'px !important')
+      // })
     },
     testSlider: function (newVal) {
       console.log('testslider: ' + newVal)
@@ -1338,6 +1530,16 @@ export default {
       // const newSliderValue = this.model.standard
       // console.log('NEW VAL: ' + newSliderValue)
     },
+    copyTextboxToClipboard: function (newText) {
+      copyToClipboard(newText)
+      .then(() => {
+        // success!
+        console.log('copied!')
+      })
+      .catch(() => {
+        // fail
+      })
+    }
   },
 }
 // function decycle (obj, stack = []) {

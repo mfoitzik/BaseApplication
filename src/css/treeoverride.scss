@@ -5,7 +5,7 @@
   --vert-color: red;
   --vert-width: 1px;
   --vert-style: solid;
-  --hrz-color: red;
+  --hrz-color: blue;
   --hrz-width: 1px;
   --hrz-style: dotted;
   --node-wrap: nowrap;
@@ -73,6 +73,7 @@ $story-wrap: var(--story-wrap);
     font-family: $node-font-family;
     font-size: $node-font-size;
     font-weight: $node-font-weight;
+    margin-left: -0x;
     // color:pink !important;
   }
 
@@ -88,6 +89,8 @@ $story-wrap: var(--story-wrap);
 
     &__node {
       padding: 0 0 3px $node-padding-left; // this adjusts entire node position
+      // border-left: solid 2px green;
+      // margin-left: -0px;
 // the following is the left vertical
       &:after {
         content: "";
@@ -136,6 +139,7 @@ $story-wrap: var(--story-wrap);
       left: $el-position; // part of left position adjust
       border-left: $vert-width $vert-style $vert-color;
       border-bottom: $hrz-width $hrz-style $hrz-color;
+      
     }
 // entire child node
     &__children {
