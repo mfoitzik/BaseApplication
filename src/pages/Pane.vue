@@ -858,7 +858,22 @@
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="appscss">
-            <div class="text-h6" style="margin-bottom:20px;"><div style="display:inline-block !important;vertical-align:middle;">App.scss/sass Modification</div><q-btn round color="orange-8" size="sm" icon="mdi-clipboard-multiple-outline" style="margin-left:18px;vertical-align:middle;display:inline:block;" v-on:click="copyTextboxToClipboard(textApscss)" /></div>
+            <div class="text-h6" style="margin-bottom:20px;"><div style="display:inline-block !important;vertical-align:middle;">App.scss/sass Modification</div>
+            <q-btn 
+            round 
+            color="orange-8" 
+            size="sm" 
+            icon="mdi-clipboard-multiple-outline" 
+            style="margin-left:18px;vertical-align:middle;display:inline:block;" 
+            v-on:click="copyTextboxToClipboard(textApscss)">
+            <q-tooltip>
+          Copy to Clipboard
+        </q-tooltip>
+        
+            </q-btn><q-badge color="blue" v-show="copied">
+      Copied to clipboard!
+    </q-badge>
+            </div>
             
             
     <div class="row">
@@ -970,10 +985,12 @@ var codetemplatebase = `This is line 1: {mystandard}
 This is line 2
 This is line 3`
 var codetemplate = codetemplatebase
+var tempArrowSize = ''
 export default {
   data () {
     return {
       tab: 'appscss',
+      copied: false,
       textApscss: '',
       hasTempStyle: false,
       hasTempStyleHz: false,
@@ -1220,7 +1237,7 @@ export default {
       connectorOptions: ['solid', 'dotted', 'dashed', 'double'],
       onclick (node) {
         alert(node.label)
-      },
+      }
     }
   },
   methods: {
@@ -1280,6 +1297,7 @@ export default {
       titems.forEach(function (userItem) {
         userItem.style.setProperty('--arrow-size', newSize + 'px')
       })
+      this.textApscss = this.getBaseCss()
     },
     setArrowLeftMargin: function (newSize) {
       const titems = document.querySelectorAll('.q-tree__arrow')
@@ -1534,12 +1552,253 @@ export default {
       copyToClipboard(newText)
       .then(() => {
         // success!
-        console.log('copied!')
+        this.copied = true
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            this.copied = false
+            this.timer = null
+          }, 2000)
       })
       .catch(() => {
         // fail
       })
-    }
+    },
+    getBaseCss: function () {
+  return `$arrow-color: var(--arrow-color);
+	$arrow-size: ${this.arrowSize}px;
+	$arrow-margin: var(--arrow-margin);
+	$vert-color: var(--vert-color);
+	$vert-width: var(--vert-width);
+	$vert-style: var(--vert-style);
+	$hrz-color: var(--hrz-color);
+	$hrz-width: var(--hrz-width);
+	$hrz-style: var(--hrz-style);
+	$vert-position: var(--vert-position); // SETTING 1 OF 4 NEEDS TO CHANGE TOGETHER. vertical node connector line left position
+	$el-position: var(--el-position); // SETTING 2 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line left position
+	$el-width: var(--el-width); // SETTING 3 OF 4 NEEDS TO CHANGE TOGETHER. node 'el' line width
+	$node-padding-left: var(--node-padding-left); // SETTING 4 OF 4 NEEDS TO CHANGE TOGETHER. entire node "position"
+	$icon-color: var(--icon-color);
+	$icon-size: var(--icon-size);
+	$icon-padding-bottom: var(--icon-padding-bottom);
+	$icon-margin-right: var(--icon-margin-right);
+	$node-color: var(--node-color);
+	$node-font-family: var(--node-font-family);
+	$node-font-size: var(--node-font-size);
+	$node-font-weight: var(--node-font-weight);
+	$node-margin-top: var(--node-margin-top);
+	$node-padding: var(--node-padding);
+	$node-wrap: var(--node-wrap);
+	$story-padding-top: var(--story-padding-top);
+	$story-padding-right: var(--story-padding-right);
+	$story-padding-bottom: var(--story-padding-bottom);
+	$story-padding-left: var(--story-padding-left);
+	$story-color: var(--story-color) !important;
+	$story-font-family: var(--story-font-family);
+	$story-font-size: var(--story-font-size);
+	$story-font-weight: var(--story-font-weight);
+	$story-wrap: var(--story-wrap);
+	.tree-wrapper {
+	  .node-common {
+		white-space: $node-wrap;
+		color: $node-color;
+		font-family: $node-font-family;
+		font-size: $node-font-size;
+		font-weight: $node-font-weight;
+		margin-left: -0x;
+		// color:pink !important;
+	  }
+
+	  .icon-common {
+		font-size: $icon-size !important;
+		padding-bottom: $icon-padding-bottom;
+		margin-right: $icon-margin-right;
+		color:$icon-color !important;
+	  }
+	  .q-tree {
+		position: relative;
+		color: $blue;
+
+		&__node {
+		  padding: 0 0 3px $node-padding-left; // this adjusts entire node position
+		  // border-left: solid 2px green;
+		  // margin-left: -0px;
+	// the following is the left vertical
+		  &:after {
+			content: "";
+			position: absolute;
+			top: -4px;
+			bottom: 0;
+			width: 2px;
+			right: auto;
+			left: $vert-position; // part of left position adjust
+			border-left: $vert-width $vert-style $vert-color;
+		  }
+
+		  &:last-child:after {
+			display: none;
+		  }
+
+		  &--disabled {
+			pointer-events: none;
+
+			.disabled {
+			  opacity: 1 !important;
+			}
+
+			> div,
+			> i,
+			> .disabled {
+			  opacity: 0.6 !important;
+
+			  .q-tree__node--disabled {
+				> div,
+				> i,
+				> .disabled {
+				  opacity: 1 !important;
+				}
+			  }
+			}
+		  }
+		}
+	// the following adjusts the vert/horiz line before a node
+		&__node-header:before {
+		  content: "";
+		  position: absolute;
+		  top: -4px;
+		  bottom: 50%;
+		  width: $el-width; // part of left position adjust
+		  left: $el-position; // part of left position adjust
+		  border-left: $vert-width $vert-style $vert-color;
+		  border-bottom: $hrz-width $hrz-style $hrz-color;
+		  
+		}
+	// entire child node
+		&__children {
+		  padding-left: 25px; // part of left position adjust (for entire tree)
+		}
+	// "story"/body nodes
+		&__node-body {
+		  padding: $story-padding-top $story-padding-right $story-padding-bottom $story-padding-left;
+		  font-size: $story-font-size;
+		  font-family: $story-font-family;
+		  font-weight: $story-font-weight;
+		  color: $story-color;
+		  white-space: $story-wrap;
+		}
+
+		&__node--parent {
+		  padding-left: 2px;
+
+		  > .q-tree__node-header:before {
+			width: 15px;
+			left: -15px;
+		  }
+
+		  > .q-tree__node-collapsible > .q-tree__node-body {
+			padding: 5px 0 8px 27px;
+			
+			&:after {
+			  content: "";
+			  position: absolute;
+			  top: 0;
+			  width: 2px;
+			  height: 100%;
+			  right: auto;
+			  left: 12px;
+			  border-left: 1px solid currentColor;
+			  bottom: 50px;
+			}
+		  }
+		}
+
+		&__node--link {
+		  cursor: pointer;
+		}
+	// adjust below to tighten up nodes padding and margin top was at 4px
+		&__node-header {
+		  padding: $node-padding;
+		  margin-top: $node-margin-top;
+		  border-radius: $generic-border-radius;
+		  outline: 0;
+		}
+
+		&__node-header-content {
+		  color: #000;
+		  transition: color 0.3s;
+		}
+
+		&__node--selected .q-tree__node-header-content {
+		  color: $grey;
+		}
+
+		&__icon, &__node-header-content .q-icon, &__spinner {
+		  font-size: 21px;
+		}
+
+		&__img {
+		  height: 42px;
+		}
+
+		&__avatar, &__node-header-content .q-avatar {
+		  font-size: 28px;
+		  border-radius: 50%;
+		  width: 28px;
+		  height: 28px;
+		}
+
+		&__arrow, &__spinner {
+		  font-size: 16px;
+		}
+
+		&__arrow {
+		  font-size: $arrow-size;
+		  color: $arrow-color;
+		  margin-left: $arrow-margin;
+		  transition: transform 0.3s;
+
+		  &--rotate {
+			transform: rotate3d(0, 0, 1, 90deg);
+		  }
+		}
+
+		// remove connectors before root
+		> .q-tree__node {
+		  padding: 0;
+
+		  &:after, > .q-tree__node-header:before {
+			display: none;
+		  }
+		}
+
+		// leave space for root empty node
+		> .q-tree__node--child > .q-tree__node-header {
+		  padding-left: 24px;
+		}
+
+		&--dark .q-tree__node-header-content {
+		  color: #fff;
+		}
+
+		&--no-connectors {
+		  .q-tree__node:after,
+		  .q-tree__node-header:before,
+		  .q-tree__node-body:after {
+			display: none !important;
+		  }
+		}
+	  }
+
+	  [dir=rtl] {
+		.q-tree__arrow {
+		  transform: rotate3d(0, 0, 1, 180deg) #{"/* rtl:ignore */"};
+
+		  &--rotate {
+			transform: rotate3d(0, 0, 1, 90deg) #{"/* rtl:ignore */"};
+		  }
+		}
+	  }
+	}`
+}
   },
 }
 // function decycle (obj, stack = []) {
@@ -1557,4 +1816,5 @@ export default {
 //       Object.entries(obj)
 //         .map(([k, v]) => [k, decycle(v, s)]))
 // }
+
 </script>
