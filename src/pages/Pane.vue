@@ -91,6 +91,12 @@
               <template v-slot:before>
                 <div class="q-pa-md bg-brown-11 full-height" style="overflow:auto;">
                   <div class="text-h4 q-mb-md">Before</div>
+                  <q-btn color="primary" @click="openDialog" label="primary" />
+                  <q-btn color="secondary" @click="changeTree" label="secondary" />
+                  <q-btn color="purple" @click="forceReload" label="reload" />
+                  <q-btn color="green" @click="readFolder" label="read folder" />
+                  <q-btn color="indigo" @click="deleteFile" label="delete file" />
+                  <q-btn color="lime" @click="saveFile" label="save as" />
                   <p>test line</p>
                 <p>test line</p>
                 <p>test line</p>
@@ -136,11 +142,10 @@
 
 <script>
 import { copyToClipboard } from 'quasar'
-var codetemplatebase = `This is line 1: {mystandard}
-This is line 2
-This is line 3`
-var codetemplate = codetemplatebase
-var tempArrowSize = ''
+const dialog = electron.remote.dialog
+const globalShortcut = electron.remote.globalShortcut
+const getCurrentWindow = electron.remote.getCurrentWindow
+const globby = electron.remote.globby
 export default {
   data () {
     return {
@@ -218,7 +223,144 @@ export default {
       // event.cancelBubble = true
       console.log('DOUBLEclick: ' + event.currentTarget.id)
       // JSON.stringify(this)
+    },
+    readFolder: function () {
+      dialog.showOpenDialog({
+        properties: ['openFile', 'openDirectory']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+        if (result.canceled === false) {
+          const listAllFilesAndDirs = dir => globby(`${dir}/**/*`)
+          (async () => {
+            const result = await listAllFilesAndDirs(process.cwd())
+            console.log(result)
+          })()
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    openDialog: function () {
+      dialog.showOpenDialog({
+        // properties: ['openFile', 'openDirectory']
+        properties: ['openFile']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+        if (result.canceled === false) {
+          // fs.readdir(result.filePaths[0], function (err, files) {
+          //     //handling error
+          //     if (err) {
+          //         return console.log('Unable to scan directory: ' + err)
+          //     } 
+          //     //listing all files using forEach
+          //     files.forEach(function (file) {
+          //         // Do whatever you want to do with the file
+          //         console.log(file)
+          //     })
+          // })
+          fs.readFile(result.filePaths[0], (err, data) => {
+            if (err) {
+              console.error(err)
+              return
+            }
+            console.log(data.toString())
+          })
+          let tempFile = result.filePaths[0].replace('.txt', '-2.txt')
+          fs.writeFile(tempFile, 'Hi Mike! overwrite', function (err) {
+              if(err) {
+                  return console.log(err)
+              }
+              console.log("The file was saved!")
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    forceReload: function () {
+      getCurrentWindow().reload()
+    },
+    changeTree: function () {
+      this.customize = [
+        {
+          label: 'Mike was here',
+          icon: 'restaurant_menu',
+          iconcolor: 'teal-10',
+          header: 'generic',
+          myid: 'gf1'
+        },
+        {
+          label: 'Good service',
+          header: 'generic',
+          myid: 'gs1',
+          enabled: false,
+          children: [
+            {
+              label: 'Prompt attention',
+              children: [
+                { label: 'child node one' },
+                { label: 'child node two' },
+              ],
+            },
+            { label: 'Professional waiter' },
+          ],
+        },
+        {
+          label: 'Pleasant surroundings',
+          myid: 'ps1',
+          children: [
+            { label: 'Happy atmosphere' },
+            { label: 'Good table presentation', header: 'generic' },
+            { label: 'Pleasing decor' },
+          ],
+        },
+      ]
+    },
+    deleteFile: function () {
+      dialog.showOpenDialog({
+        // properties: ['openFile', 'openDirectory']
+        properties: ['openFile']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+        if (result.canceled === false) {
+          fs.unlink(result.filePaths[0], function (err) {
+              if(err) {
+                  return console.log(err)
+              }
+              console.log("The file was deleted!")
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    saveFile: function () {
+      let filename = dialog.showSaveDialog({}
+      ).then(result => {
+        filename = result.filePath
+        if (filename === undefined) {
+          alert('the user clicked the btn but didn\'t created a file')
+          return
+        }
+        // fs.writeFile(filename, content, (err) => {
+        //   if (err) {
+        //     alert('an error ocurred with file creation ' + err.message)
+        //     return
+        //   }
+        //   alert('WE CREATED YOUR FILE SUCCESFULLY')
+        // })
+        console.log(filename)
+        alert('we End')
+      }).catch(err => {
+        alert(err)
+      })
+
+      
     }
+      // console.log(__statics)
   },
 }
 </script>

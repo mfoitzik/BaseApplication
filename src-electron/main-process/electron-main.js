@@ -1,5 +1,6 @@
 import { app, BrowserWindow, nativeTheme, Menu } from 'electron'
 import { folderPath } from '../../src-common/open-folder'
+import path from 'path'
 var fs = require('fs')
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
@@ -69,7 +70,7 @@ function createWindow () {
       nodeIntegration: QUASAR_NODE_INTEGRATION,
 
       // More info: /quasar-cli/developing-electron-apps/electron-preload-script
-      // preload: path.resolve(__dirname, 'electron-preload.js')
+      preload: path.resolve(__dirname, 'electron-preload.js')
     }
   })
 
