@@ -97,6 +97,8 @@
                   <q-btn color="green" @click="readFolder" label="read folder" />
                   <q-btn color="indigo" @click="deleteFile" label="delete file" />
                   <q-btn color="lime" @click="saveFile" label="save as" />
+                  <q-btn color="green" @click="readFolderReaddirp" label="read folder readdirp" />
+                  <q-btn color="green" @click="readFolderGlobby" label="read folder globby" />
                   <p>test line</p>
                 <p>test line</p>
                 <p>test line</p>
@@ -141,22 +143,22 @@
 </template>
 
 <script>
-import { copyToClipboard } from 'quasar'
+import { copyToClipboard } from 'quasar' 
 const dialog = electron.remote.dialog
 const globalShortcut = electron.remote.globalShortcut
 const getCurrentWindow = electron.remote.getCurrentWindow
-const globby = electron.remote.globby
+const firstBy = require('thenby')
 export default {
   data () {
     return {
-      splitterModel: 20, // start at 50%
+      splitterModel: 20, // start at 50%n
       splitterModel2: 90,
       splitterOrientation: true,
       customize: [
         {
           label: 'Good food',
-          icon: 'restaurant_menu',
-          iconcolor: 'teal-10',
+          icon: 'mdi-folder',
+          iconcolor: 'amber-5',
           header: 'generic',
           myid: 'gf1',
           children: [
@@ -231,14 +233,172 @@ export default {
         console.log(result.canceled)
         console.log(result.filePaths)
         if (result.canceled === false) {
-          const listAllFilesAndDirs = dir => globby(`${dir}/**/*`)
+          console.log('result not cancelled')
+          let dir = result.filePaths[0]
+          var options
+          var walker
+        
+          options = {
+            followLinks: false
+            // directories with these keys will be skipped
+            // , filters: ["Temp", "_Temp"]
+          }
+        
+          walker = walk.walk("c:/Temp", options)
+        
+          // OR
+          // walker = walk.walkSync("/tmp", options);
+        
+          walker.on("names", function (root, nodeNamesArray) {
+            console.log("Files & folders in the " + root + " folder: " + nodeNamesArray)
+            // nodeNamesArray.sort(function (a, b) {
+            //   if (a > b) return 1
+            //   if (a < b) return -1
+            //   return 0
+            // })
+          })
+        
+          walker.on("directories", function (root, dirStatsArray, next) {
+            // dirStatsArray is an array of `stat` objects with the additional attributes
+            // * type
+            // * error
+            // * name
+            console.log(dirStatsArray)
+            next()
+          })
+        
+          walker.on("file", function (root, fileStats, next) {
+            // fs.readFile(fileStats.name, function () {
+            //   // doStuff
+            //   console.log('FILE: ' + data)
+            //   next()
+            // })
+            console.log(fileStats.name)
+            next()
+          })
+        
+          walker.on("errors", function (root, nodeStatsArray, next) {
+            next()
+          })
+        
+          walker.on("end", function () {
+            console.log("all done")
+          })
+          
+        }
+      }).catch(function (e) {
+        console.error(e) // "oh, no!"
+      })
+    },
+    readFolderReaddirp: function () {
+      let allPaths = []
+      dialog.showOpenDialog({
+        properties: ['openFile', 'openDirectory']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+        if (result.canceled === false) {
+          console.log('result not cancelled')
+          let dir = result.filePaths[0]
+          readdirp(dir, {alwaysStat: true, type: 'files_directories'})
+          .on('data', (entry) => {
+            // console.log(entry.stats.isDirectory())
+            let isDirectory = entry.stats.isDirectory()
+            let isFile = entry.stats.isFile()
+            const {path, stats: {size}} = entry
+            // const {path} = entry
+            // console.log(path)
+            // allPaths.push(path)
+            let fileSize = size.toString()
+            let fileExtension = fspath.extname(path)
+            let pathPieces = path.split('\\')
+            let level = pathPieces.length - 1
+            let levelName = pathPieces[level]
+            let levelParent = ''
+            if (level > 0) {
+              levelParent = pathPieces[level - 1]
+            }
+            let fileOrDirectory = 'x'
+            if (isFile == true) {
+              fileOrDirectory = 'f'
+            }
+            if (isDirectory == true) {
+              fileOrDirectory = 'd'
+            }
+            allPaths.push({path, fileSize, fileExtension, fileOrDirectory, level, levelName, levelParent})
+            console.log(`${JSON.stringify({path, fileSize, fileOrDirectory, isFile, levelName})}`)
+            // console.log('MIKETEST')
+            // console.log(entry)
+            
+          })
+          .on('warn', error => console.error('non-fatal error', error))
+          .on('error', error => console.error('fatal error', error))
+          .on('end', function () {
+              console.log('done')
+              // allPaths.sort((a, b) => (a.level > b.level) ? 1 : (a.level === b.level) ? ((a.levelParent > b.levelParent) ? 1 : -1) : -1 )
+              let allFiles = []
+              let allDirectories = []
+              for (let i = 0; i <= allPaths.length - 1; i ++) {
+                if (allPaths[i].fileOrDirectory == 'd') {
+                  allDirectories.push(allPaths[i])
+                }
+                if (allPaths[i].fileOrDirectory == 'f') {
+                  allFiles.push(allPaths[i])
+                }
+              }
+              // allPaths.sort(firstBy('level').thenBy('fileOrDirctory').thenBy('levelName', {ignoreCase:true}))
+              allDirectories.sort(firstBy('level').thenBy('levelName', {ignoreCase:true}))
+              allFiles.sort(firstBy('level').thenBy('levelName', {ignoreCase:true}))
+              let newTree = []
+              let start = 0
+              for (let i = 0; i <= allDirectories.length - 1; i++) {
+                if (allDirectories[i].level == start) {
+                  let tempNode = {label: '', icon: 'mdi-folder', iconcolor: 'amber-5', header: 'generic', myid: '', fileType: 'd'}
+                  tempNode.label = allDirectories[i].levelName
+                  tempNode.myid = result.filePaths[0] + '\\' + allDirectories[i].path
+                  newTree.push(tempNode)
+                } else {
+                  start++
+                }
+              }
+              // console.log(JSON.stringify(allPaths))
+              // console.log(JSON.stringify(allDirectories))
+              // console.log(JSON.stringify(allFiles))
+              console.log('---------------------------------------------------')
+              console.log(result.filePaths[0])
+              console.log(JSON.stringify(newTree))
+            } 
+          )
+        }
+      }).catch(function (e) {
+        console.error(e) // "oh, no!"
+      })
+    },
+    readFolderGlobby: function () {
+      dialog.showOpenDialog({
+        properties: ['openFile', 'openDirectory']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+        if (result.canceled === false) {
+          console.log('result not cancelled')
+          let dir = result.filePaths[0]
+          console.log('MIKE: ' + dir)
           (async () => {
-            const result = await listAllFilesAndDirs(process.cwd())
-            console.log(result)
+          try {
+            const paths = await globby([dir, '!cake'])
+          }
+          catch (e) {
+            console.log(e.message)
+          }
+          
+      
+          console.log(paths)
+          //=> ['unicorn', 'rainbow']
           })()
         }
-      }).catch(err => {
-        console.log(err)
+      }).catch(function (e) {
+        console.error(e) // "oh, no!"
       })
     },
     openDialog: function () {

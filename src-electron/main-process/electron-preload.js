@@ -1,3 +1,6 @@
 window.electron = require('electron')
 window.fs = require('fs')
+window.fspath = require('path')
+window.walk = require('walk')
+window.readdirp = require('readdirp')
 window.globby = require('globby')

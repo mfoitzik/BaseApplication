@@ -120,13 +120,15 @@ export default {
   methods: {
     minimize () {
       if (process.env.MODE === 'electron') {
-        this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
+        // this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
+        electron.remote.BrowserWindow.getFocusedWindow().minimize()
       }
     },
 
     maximize () {
       if (process.env.MODE === 'electron') {
-        const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow()
+        // const win = this.$q.electron.remote.BrowserWindow.getFocusedWindow()
+        const win = electron.remote.BrowserWindow.getFocusedWindow()
 
         if (win.isMaximized()) {
           win.unmaximize()
@@ -140,7 +142,8 @@ export default {
 
     closeApp () {
       if (process.env.MODE === 'electron') {
-        this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
+        // this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
+        electron.remote.BrowserWindow.getFocusedWindow().close()
       }
     }
   }
