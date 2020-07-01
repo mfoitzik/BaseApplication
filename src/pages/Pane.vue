@@ -200,6 +200,13 @@ export default {
             { label: 'Pleasing decor' },
           ],
         },
+        {
+          label: 'Test Node',
+          myid: 'testnode1',
+          children: [{"label":"0","icon":"mdi-folder","iconcolor":"amber-5","header":"generic","myid":"C:\\Temp\\0","fileType":"d"},
+          {"label":"01","icon":"mdi-folder","iconcolor":"amber-5","header":"generic","myid":"C:\\Temp\\01","fileType":"d"}
+          ]
+        }
       ],
       onclick (node) {
         alert(node.label)
@@ -292,23 +299,17 @@ export default {
     },
     readFolderReaddirp: function () {
       let allPaths = []
+      let localthis = this
       dialog.showOpenDialog({
         properties: ['openFile', 'openDirectory']
       }).then(result => {
-        console.log(result.canceled)
-        console.log(result.filePaths)
         if (result.canceled === false) {
-          console.log('result not cancelled')
           let dir = result.filePaths[0]
           readdirp(dir, {alwaysStat: true, type: 'files_directories'})
           .on('data', (entry) => {
-            // console.log(entry.stats.isDirectory())
             let isDirectory = entry.stats.isDirectory()
             let isFile = entry.stats.isFile()
             const {path, stats: {size}} = entry
-            // const {path} = entry
-            // console.log(path)
-            // allPaths.push(path)
             let fileSize = size.toString()
             let fileExtension = fspath.extname(path)
             let pathPieces = path.split('\\')
@@ -316,7 +317,9 @@ export default {
             let levelName = pathPieces[level]
             let levelParent = ''
             if (level > 0) {
-              levelParent = pathPieces[level - 1]
+              let curName = '\\' + pathPieces[level]
+              // let curLevelParentname = '\\' + pathPieces[level - 1]
+              levelParent = path.replace(curName, '')
             }
             let fileOrDirectory = 'x'
             if (isFile == true) {
@@ -325,17 +328,11 @@ export default {
             if (isDirectory == true) {
               fileOrDirectory = 'd'
             }
-            allPaths.push({path, fileSize, fileExtension, fileOrDirectory, level, levelName, levelParent})
-            console.log(`${JSON.stringify({path, fileSize, fileOrDirectory, isFile, levelName})}`)
-            // console.log('MIKETEST')
-            // console.log(entry)
-            
+            allPaths.push({path, fileSize, fileExtension, fileOrDirectory, level, levelName, levelParent})         
           })
           .on('warn', error => console.error('non-fatal error', error))
           .on('error', error => console.error('fatal error', error))
           .on('end', function () {
-              console.log('done')
-              // allPaths.sort((a, b) => (a.level > b.level) ? 1 : (a.level === b.level) ? ((a.levelParent > b.levelParent) ? 1 : -1) : -1 )
               let allFiles = []
               let allDirectories = []
               for (let i = 0; i <= allPaths.length - 1; i ++) {
@@ -346,27 +343,79 @@ export default {
                   allFiles.push(allPaths[i])
                 }
               }
-              // allPaths.sort(firstBy('level').thenBy('fileOrDirctory').thenBy('levelName', {ignoreCase:true}))
               allDirectories.sort(firstBy('level').thenBy('levelName', {ignoreCase:true}))
               allFiles.sort(firstBy('level').thenBy('levelName', {ignoreCase:true}))
               let newTree = []
               let start = 0
               for (let i = 0; i <= allDirectories.length - 1; i++) {
+                let tempNode = {label: '', icon: 'mdi-folder', iconcolor: 'amber-5', header: 'generic', myid: '', fileType: 'd', level: 0, children: []}
                 if (allDirectories[i].level == start) {
-                  let tempNode = {label: '', icon: 'mdi-folder', iconcolor: 'amber-5', header: 'generic', myid: '', fileType: 'd'}
                   tempNode.label = allDirectories[i].levelName
                   tempNode.myid = result.filePaths[0] + '\\' + allDirectories[i].path
-                  newTree.push(tempNode)
+                  tempNode.level = allDirectories[i].level
                 } else {
                   start++
+                  tempNode.label = allDirectories[i].levelName
+                  tempNode.myid = result.filePaths[0] + '\\' + allDirectories[i].path
+                  tempNode.level = allDirectories[i].level
+                }
+                if (allDirectories[i].level === 0) {
+                  newTree.push(tempNode)
+                } else {
+                  const findItemNested = (arr, itemLevel, itemLabel, nestingKey) => (
+                    arr.reduce((a, item) => {
+                      if (a) return a
+                      if (item.level === itemLevel && item.myid === (result.filePaths[0] + '\\' + itemLabel)) {
+                        return item
+                      }
+                      if (item[nestingKey] && item[nestingKey].length > 0) {
+                        return findItemNested(item[nestingKey], itemLevel, itemLabel, nestingKey)
+                      }
+                    }, null)
+                  )
+                  if (allDirectories[i].levelParent != '') {
+                    const correctParent = findItemNested(newTree, start - 1, allDirectories[i].levelParent, "children")
+                    correctParent.children.push(tempNode)
+                  } else {
+                    newTree.push(tempNode)
+                  }
                 }
               }
-              // console.log(JSON.stringify(allPaths))
-              // console.log(JSON.stringify(allDirectories))
-              // console.log(JSON.stringify(allFiles))
-              console.log('---------------------------------------------------')
-              console.log(result.filePaths[0])
-              console.log(JSON.stringify(newTree))
+              // now do files
+              start = 0
+              for (let i = 0; i <= allFiles.length - 1; i++) { 
+                let tempNode = {label: '', icon: 'mdi-text', iconcolor: 'grey-14', header: 'generic', myid: '', fileType: 'f', level: 0}
+                if (allFiles[i].level == start) {
+                  tempNode.label = allFiles[i].levelName
+                  tempNode.myid = result.filePaths[0] + '\\' + allFiles[i].path
+                  tempNode.level = allFiles[i].level
+                } else {
+                  start++
+                  tempNode.label = allFiles[i].levelName
+                  tempNode.myid = result.filePaths[0] + '\\' + allFiles[i].path
+                  tempNode.level = allFiles[i].level
+                }
+                if (allFiles[i].level === 0) {
+                  newTree.push(tempNode)
+                } else {
+                  const findItemNested = (arr, itemLevel, itemLabel, nestingKey) => (
+                  arr.reduce((a, item) => {
+                    if (a) return a
+                    if (item.level === itemLevel && item.myid === (result.filePaths[0] + '\\' + itemLabel)) return item
+                    if (item[nestingKey]) return findItemNested(item[nestingKey], itemLevel, itemLabel, nestingKey)
+                  }, null)
+                  )
+                  if (allFiles[i].levelParent != '') {
+                    const correctParent = findItemNested(newTree, start - 1, allFiles[i].levelParent, "children")
+                    correctParent.children.push(tempNode)
+                  } else {
+                    newTree.push(tempNode)
+                  }
+                  
+                  
+                }
+              }
+              localthis.customize = newTree
             } 
           )
         }
