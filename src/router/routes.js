@@ -4,7 +4,31 @@ const routes = [
     path: '/',
     component: () => import('layouts/ShellLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Pane.vue') }
+      { 
+        path: '',
+        component: () => import('pages/Pane.vue'),
+        props: true,
+        children: [
+          { 
+            path: '',
+            component: () => import('pages/Explorer.vue'),
+            props: true
+          },
+          { 
+            path: 'search',
+            component: () => import('pages/Search.vue'),
+            props: true
+          },
+          { 
+            path: 'publish',
+            component: () => import('pages/Publish.vue') 
+          },
+          { 
+            path: 'settings',
+            component: () => import('pages/Settings.vue') 
+          }
+        ]
+      }
     ]
   }
 ]

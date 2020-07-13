@@ -4,22 +4,22 @@
       <div
         class="row items-center justify-center activity-selector-icon-holder"
       >
-        <q-icon name="mdi-folder-outline" class="activity-selector-icon" />
+        <q-icon name="mdi-folder-outline" class="activity-selector-icon" clickable @click="$router.replace('/')" />
       </div>
       <div
         class="row items-center justify-center activity-selector-icon-holder"
       >
-        <q-icon name="mdi-magnify" class="activity-selector-icon" />
+        <q-icon name="mdi-magnify" class="activity-selector-icon" clickable @click="$router.replace('/search')" />
       </div>
       <div
         class="row items-center justify-center activity-selector-icon-holder"
       >
-        <q-icon name="mdi-publish" class="activity-selector-icon" />
+        <q-icon name="mdi-publish" class="activity-selector-icon" clickable @click="$router.replace('/publish')" />
       </div>
       <div
         class="row items-center justify-center activity-selector-icon-holder"
       >
-        <q-icon name="mdi-cog" class="activity-selector-icon" />
+        <q-icon name="mdi-cog" class="activity-selector-icon" clickable @click="$router.replace('/settings')" />
       </div>
     </div>
     <div class="col" style="display: inline-block;">
@@ -34,49 +34,7 @@
             "
             visible
           >
-            <div @contextmenu="showNodeSelected">TEST</div>
-            <div class="q-pa-md">
-              <button v-on:click="showNodeSelected">showClickedNode</button>
-              <div class="tree-wrapper">
-                <q-tree
-                  :nodes="customize"
-                  :duration="100"
-                  node-key="label"
-                  default-expand-all
-                  ref="mytree"
-                >
-                  <template v-slot:header-generic="prop">
-                    <div
-                      class="row items-center no-wrap"
-                      :id="prop.node.myid"
-                      @contextmenu="miketest"
-                      @click="mikeclick"
-                      @doubleclick="mikedouble"
-                    >
-                      <q-icon
-                        :name="prop.node.icon || 'star'"
-                        :color="prop.node.iconcolor || 'orange'"
-                        class="icon-common"
-                      />
-                      <div class="node-common">{{ prop.node.label }}</div>
-                    </div>
-                  </template>
-
-                  <template v-slot:default-header="prop">
-                    <div class="node-common">{{ prop.node.label }}</div>
-                  </template>
-
-                  <template v-slot:body-story="prop">
-                    <span
-                      class="row items-center"
-                      :id="prop.node.myid"
-                      @contextmenu="miketest"
-                      >The story is: {{ prop.node.story }}</span
-                    >
-                  </template>
-                </q-tree>
-              </div>
-            </div>
+            <router-view :pob="passObject" />
           </div>
         </template>
 
@@ -99,6 +57,7 @@
                   <q-btn color="lime" @click="saveFile" label="save as" />
                   <q-btn color="green" @click="readFolderReaddirp" label="read folder readdirp" />
                   <q-btn color="green" @click="readFolderGlobby" label="read folder globby" />
+                  <q-btn color="green" @click="testParam" label="test route param" />
                   <p>test line</p>
                 <p>test line</p>
                 <p>test line</p>
@@ -208,12 +167,22 @@ export default {
           ]
         }
       ],
+      passObject: {
+        eTree: this.customize,
+        message: 'TEST PROP MESSAGE'
+      },
       onclick (node) {
         alert(node.label)
       }
     }
   },
+  mounted: function () {
+    this.passObject.eTree = this.customize
+  },
   methods: {
+    testParam: function () {
+      console.log(this.passObject)
+    },
     showNodeSelected: function () {
       this.$refs.mytree.setExpanded('Good food', false)
     },
@@ -384,7 +353,7 @@ export default {
               // now do files
               start = 0
               for (let i = 0; i <= allFiles.length - 1; i++) { 
-                let tempNode = {label: '', icon: 'mdi-text', iconcolor: 'grey-14', header: 'generic', myid: '', fileType: 'f', level: 0}
+                let tempNode = {label: '', icon: 'mdi-file-outline', iconcolor: 'grey-14', header: 'generic', myid: '', fileType: 'f', level: 0}
                 if (allFiles[i].level == start) {
                   tempNode.label = allFiles[i].levelName
                   tempNode.myid = result.filePaths[0] + '\\' + allFiles[i].path
@@ -416,6 +385,9 @@ export default {
                 }
               }
               localthis.customize = newTree
+              localthis.passObject.eTree = newTree
+              console.log(newTree)
+              console.log('HI MIKE')
             } 
           )
         }
