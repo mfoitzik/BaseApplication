@@ -11,17 +11,11 @@ const routes = [
         children: [
           { 
             path: '',
-            component: () => import('pages/Explorer.vue'),
-            props: true
+            component: () => import('pages/Explorer.vue')
           },
           { 
-            path: 'search',
-            component: () => import('pages/Search.vue'),
-            props: true
-          },
-          { 
-            path: 'publish',
-            component: () => import('pages/Publish.vue') 
+            path: 'reports',
+            component: () => import('pages/Reports.vue') 
           },
           { 
             path: 'settings',

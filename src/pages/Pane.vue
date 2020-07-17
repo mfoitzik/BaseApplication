@@ -9,12 +9,7 @@
       <div
         class="row items-center justify-center activity-selector-icon-holder"
       >
-        <q-icon name="mdi-magnify" class="activity-selector-icon" clickable @click="$router.replace('/search')" />
-      </div>
-      <div
-        class="row items-center justify-center activity-selector-icon-holder"
-      >
-        <q-icon name="mdi-publish" class="activity-selector-icon" clickable @click="$router.replace('/publish')" />
+        <q-icon name="mdi-chart-bar-stacked" class="activity-selector-icon" clickable @click="$router.replace('/reports')" />
       </div>
       <div
         class="row items-center justify-center activity-selector-icon-holder"
@@ -34,7 +29,7 @@
             "
             visible
           >
-            <router-view :pob="passObject" />
+            <router-view />
           </div>
         </template>
 
@@ -51,6 +46,7 @@
                   <div class="text-h4 q-mb-md">Before</div>
                   <q-btn color="primary" @click="openDialog" label="primary" />
                   <q-btn color="secondary" @click="changeTree" label="secondary" />
+                  <q-btn color="secondary" @click="toggleDev" label="Toggle Dev" />
                   <q-btn color="purple" @click="forceReload" label="reload" />
                   <q-btn color="green" @click="readFolder" label="read folder" />
                   <q-btn color="indigo" @click="deleteFile" label="delete file" />
@@ -103,9 +99,11 @@
 
 <script>
 import { copyToClipboard } from 'quasar' 
+import { store } from '../store'
 const dialog = electron.remote.dialog
 const globalShortcut = electron.remote.globalShortcut
 const getCurrentWindow = electron.remote.getCurrentWindow
+const getCurrentWebContents = electron.remote.getCurrentWebContents
 const firstBy = require('thenby')
 export default {
   data () {
@@ -167,19 +165,21 @@ export default {
           ]
         }
       ],
-      passObject: {
-        eTree: this.customize,
-        message: 'TEST PROP MESSAGE'
-      },
       onclick (node) {
         alert(node.label)
       }
     }
   },
-  mounted: function () {
-    this.passObject.eTree = this.customize
-  },
   methods: {
+    toggleDev: function () {
+      // electron.remote.BrowserWindow.webContents.toggleDevTools()
+      // const testx = electron.remote.webContents.getAllWebContents()
+      // testx[1].webContents.toggleDevTools()
+      // console.log(testx)
+      // console.log(testx.length)
+      // console.log(JSON.stringify(electron.remote.getCurrentWindow))
+      getCurrentWindow().toggleDevTools()
+    },
     testParam: function () {
       console.log(this.passObject)
     },
@@ -384,10 +384,11 @@ export default {
                   
                 }
               }
-              localthis.customize = newTree
-              localthis.passObject.eTree = newTree
-              console.log(newTree)
-              console.log('HI MIKE')
+              // localthis.customize = newTree
+              // localthis.passObject.eTree = newTree
+              store.updateExplorer(newTree)
+              // console.log(newTree)
+              // console.log('HI MIKE')
             } 
           )
         }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>
-            Publish
+            Reports
         </h1>
     </div>
 </template>

@@ -2,15 +2,17 @@
     <div>
         <div @contextmenu="showNodeSelected">TEST</div>
             <div class="q-pa-md">
+              <button v-on:click="testTreeUpdate">Test Tree Update</button>
               <button v-on:click="showParam">Test Param</button>
               <button v-on:click="showNodeSelected">showClickedNode</button>
               <div class="tree-wrapper">
                 <q-tree
-                  :nodes="customize"
+                  :nodes="storeState.explorer"
                   :duration="100"
                   node-key="label"
                   default-expand-all
                   ref="mytree"
+                  v-if="storeState.explorer.length > 0"
                 >
                 <!--@contextmenu="miketest"
                       @click="mikeclick"
@@ -46,12 +48,11 @@
     </div>
 </template>
 <script>
+import { store } from '../store'
 export default {
-  props: ['pob'],
   data () {
       return {
-          customize: [],
-          testmike: this.pob.eTree
+          storeState: store.state
       }
   },
   methods: {
@@ -60,14 +61,73 @@ export default {
     },
     showNodeSelected: function () {
       this.$refs.mytree.setExpanded('Good food', false)
+    },
+    testTreeUpdate: function () {
+      store.updateExplorer([
+        {
+          label: 'Good food',
+          icon: 'mdi-folder',
+          iconcolor: 'amber-5',
+          header: 'generic',
+          myid: 'gf1',
+          children: [
+            {
+              label: 'Quality ingredients',
+              body: 'story',
+              story: 'Our ingredients are sourced locally.',
+            },
+            {
+              label: 'Good recipe',
+              body: 'story',
+              story: 'Secret family recipes that everyone loves!',
+              myid: 'gr1',
+            },
+          ],
+        },
+        {
+          label: 'Good service',
+          header: 'generic',
+          myid: 'gs1',
+          enabled: false,
+          children: [
+            {
+              label: 'Prompt attention',
+              children: [
+                { label: 'child node one' },
+                { label: 'child node two' },
+              ],
+            },
+            { label: 'Professional waiter' },
+          ],
+        },
+        {
+          label: 'Pleasant surroundings',
+          myid: 'ps1',
+          children: [
+            { label: 'Happy atmosphere' },
+            { label: 'Good table presentation', header: 'generic' },
+            { label: 'Pleasing decor' },
+          ],
+        },
+        {
+          label: 'Test Node',
+          myid: 'testnode1',
+          children: [{"label":"0","icon":"mdi-folder","iconcolor":"amber-5","header":"generic","myid":"C:\\Temp\\0","fileType":"d"},
+          {"label":"01","icon":"mdi-folder","iconcolor":"amber-5","header":"generic","myid":"C:\\Temp\\01","fileType":"d"}
+          ]
+        }
+      ])
     }
     
-  },
-  watch: {
-    'pob.eTree': function (val) {
-      console.log('MIKE CHANGED')
-      this.customize = this.pob.eTree
-    }
   }
+  // watch: {
+  //   'pob.eTree': function (val) {
+  //     console.log('MIKE CHANGED')
+  //     this.customize = this.pob.eTree
+  //   }
+  // },
+  // mounted: function () {
+  //   this.customize = this.pob.eTree
+  // }
 }
 </script>
