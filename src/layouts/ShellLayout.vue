@@ -107,7 +107,7 @@
   </div>
 </template>
 <script>
-import { store } from '../store'
+import { store } from '../mainstore'
 const dialog = electron.remote.dialog
 const getCurrentWindow = electron.remote.getCurrentWindow
 const firstBy = require('thenby')

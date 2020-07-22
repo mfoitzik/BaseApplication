@@ -48,7 +48,7 @@
     </div>
 </template>
 <script>
-import { store } from '../store'
+import { store } from '../mainstore'
 export default {
   data () {
       return {

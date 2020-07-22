@@ -42,31 +42,24 @@
               style="min-height: inherit;height:100%;"
             >
               <template v-slot:before>
-                <div class="q-pa-md bg-brown-11 full-height" style="overflow:auto;">
-                  <div class="text-h4 q-mb-md">Before</div>
-                  <q-btn color="primary" @click="openDialog" label="primary" />
-                  <q-btn color="secondary" @click="changeTree" label="secondary" />
-                  <q-btn color="secondary" @click="toggleDev" label="Toggle Dev" />
-                  <q-btn color="purple" @click="forceReload" label="reload" />
-                  <q-btn color="green" @click="readFolder" label="read folder" />
-                  <q-btn color="indigo" @click="deleteFile" label="delete file" />
-                  <q-btn color="lime" @click="saveFile" label="save as" />
-                  <q-btn color="green" @click="readFolderReaddirp" label="read folder readdirp" />
-                  <q-btn color="green" @click="readFolderGlobby" label="read folder globby" />
-                  <q-btn color="green" @click="testParam" label="test route param" />
-                  <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
-                <p>test line</p>
+                <div class="q-pa-none bg-brown-11 full-height" style="overflow:auto;">
+                  <q-tab-panels v-model="panel" animated class="full-height">
+                  <q-tab-panel name="mails">
+                    <div class="text-h6">Mails</div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p><a href="https://www.mifo.com" target="_blank" @click.prevent="openExternalBrowser">Mifo Site</a></p>
+                  </q-tab-panel>
+
+                  <q-tab-panel name="alarms">
+                    <div class="text-h6">Alarms</div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  </q-tab-panel>
+
+                  <q-tab-panel name="movies">
+                    <div class="text-h6">Movies</div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  </q-tab-panel>
+                </q-tab-panels>
                 </div>
               </template>
 
@@ -99,7 +92,7 @@
 
 <script>
 import { copyToClipboard } from 'quasar' 
-import { store } from '../store'
+import { store } from '../mainstore'
 const dialog = electron.remote.dialog
 const globalShortcut = electron.remote.globalShortcut
 const getCurrentWindow = electron.remote.getCurrentWindow
@@ -111,6 +104,7 @@ export default {
       splitterModel: 20, // start at 50%n
       splitterModel2: 90,
       splitterOrientation: true,
+      panel: 'mails',
       customize: [
         {
           label: 'Good food',
@@ -171,6 +165,9 @@ export default {
     }
   },
   methods: {
+    openExternalBrowser (e) {
+      electron.remote.shell.openExternal(e.target.href)
+    },
     toggleDev: function () {
       // electron.remote.BrowserWindow.webContents.toggleDevTools()
       // const testx = electron.remote.webContents.getAllWebContents()
