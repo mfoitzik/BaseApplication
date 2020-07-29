@@ -55,7 +55,7 @@
             <q-menu>
               <q-list dense style="min-width: 100px;">
                 <q-item clickable v-close-popup>
-                  <q-item-section>Reload</q-item-section>
+                  <q-item-section @click="reloadApp">Reload</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable v-close-popup>
@@ -145,6 +145,9 @@ export default {
         // this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
         electron.remote.BrowserWindow.getFocusedWindow().close()
       }
+    },
+    reloadApp: function () {
+      getCurrentWindow().reload()
     },
     toggleDev () {
       getCurrentWindow().toggleDevTools()

@@ -43,11 +43,11 @@
             >
               <template v-slot:before>
                 <div class="q-pa-none bg-brown-11 full-height" style="overflow:auto;">
-                  <q-tab-panels v-model="panel" animated class="full-height">
-                  <q-tab-panel name="mails">
-                    <div class="text-h6">Mails</div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    <p><a href="https://www.mifo.com" target="_blank" @click.prevent="openExternalBrowser">Mifo Site</a></p>
+                  <!--<q-tab-panels v-model="panel" animated class="full-height">
+                  <q-tab-panel name="mails" class="q-pa-none">
+                    <div v-html="splashContent"> </div>
+                    <LinedTextarea style="height:100%;" v-model="tvalue" />
+                    <button v-on:click="testText">Test Text</button>
                   </q-tab-panel>
 
                   <q-tab-panel name="alarms">
@@ -59,7 +59,30 @@
                     <div class="text-h6">Movies</div>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </q-tab-panel>
-                </q-tab-panels>
+                </q-tab-panels>-->
+                  <q-tabs
+                    v-model="tab"
+                    dense
+                    class="text-grey"
+                    active-color="primary"
+                    indicator-color="primary"
+                    align="justify"
+                    narrow-indicator
+                    inline-label
+                    @click="tabSelected"
+                  >
+                    <q-tab v-for="tab in filteredTabs" :key="tab.name" :name="tab.name">
+                        <div>{{tab.label}}</div><div class="ticonwrapper"><q-icon class="ticon" @click.stop="tabIconClick(tab)" name="folder" /></div>
+                    </q-tab>
+                  </q-tabs>
+                  <q-separator />
+
+                  <q-tab-panels v-model="tab" animated>
+                      <q-tab-panel v-for="tabpanel in tabStore.mainTabs" :key="tabpanel.name" :name="tabpanel.name">
+                          <div class="text-h6">{{tabpanel.data}}</div>
+                      {{tabpanel.text}}
+                      </q-tab-panel>
+                  </q-tab-panels>
                 </div>
               </template>
 
@@ -91,19 +114,29 @@
 </template>
 
 <script>
+import LinedTextarea from 'components/LinedTextarea'
 import { copyToClipboard } from 'quasar' 
 import { store } from '../mainstore'
+import splash from '../templates/splash'
+console.log(splash)
 const dialog = electron.remote.dialog
 const globalShortcut = electron.remote.globalShortcut
 const getCurrentWindow = electron.remote.getCurrentWindow
 const getCurrentWebContents = electron.remote.getCurrentWebContents
 const firstBy = require('thenby')
 export default {
+  components: {
+     // LinedTextarea
+  },
   data () {
     return {
+      tvalue: 'This is a test',
       splitterModel: 20, // start at 50%n
       splitterModel2: 90,
+      tabStore: store.state,
+      tab: store.state.selectedTab,
       splitterOrientation: true,
+      splashContent: splash,
       panel: 'mails',
       customize: [
         {
@@ -165,6 +198,9 @@ export default {
     }
   },
   methods: {
+    testText () {
+      this.tvalue = 'line1\nline2'
+    },
     openExternalBrowser (e) {
       electron.remote.shell.openExternal(e.target.href)
     },
@@ -198,6 +234,9 @@ export default {
       // event.cancelBubble = true
       console.log('DOUBLEclick: ' + event.currentTarget.id)
       // JSON.stringify(this)
+    },
+    tabSelected: function () {
+      console.log(this.tab)
     },
     readFolder: function () {
       dialog.showOpenDialog({
@@ -541,5 +580,25 @@ export default {
     }
       // console.log(__statics)
   },
+  mounted () {
+    // alert('mounted has been called')
+    // Tab (name, label, template, data, location, dirty) 
+    this.tabStore.mainTabs = []
+    const a = new store.Tab(null, 'tab A', '', 'This is tab a', 'a location', false)
+    const b = new store.Tab('Tab B', 'tab B', '', 'This is tab B', 'B location', false)
+    store.addToMainTabs(a)
+    store.addToMainTabs(b)
+    this.tab = 'Tab B'
+  },
+  computed: {
+    // a computed getter 
+    filteredTabs: function () {
+      var returnArray = this.tabStore.mainTabs.filter(function (el) {
+        return el.name !== null
+      })
+      console.log(returnArray)
+      return returnArray
+    }
+  }
 }
 </script>
