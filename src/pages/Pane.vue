@@ -66,7 +66,7 @@
                     class="text-grey"
                     active-color="primary"
                     indicator-color="primary"
-                    align="justify"
+                    align="left"
                     narrow-indicator
                     inline-label
                     @click="tabSelected"
@@ -586,8 +586,10 @@ export default {
     this.tabStore.mainTabs = []
     const a = new store.Tab(null, 'tab A', '', 'This is tab a', 'a location', false)
     const b = new store.Tab('Tab B', 'tab B', '', 'This is tab B', 'B location', false)
+    const c = new store.Tab('Tab C', 'tab C', '', 'This is tab C', 'C location', false)
     store.addToMainTabs(a)
     store.addToMainTabs(b)
+    store.addToMainTabs(c)
     this.tab = 'Tab B'
   },
   computed: {

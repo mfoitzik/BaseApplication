@@ -18,21 +18,78 @@
                       @click="mikeclick"
                       @doubleclick="mikedouble"-->
                   <template v-slot:header-generic="prop">
-                    <div
-                      class="row items-center no-wrap"
-                      :id="prop.node.myid"
-                    >
-                      <q-icon
-                        :name="prop.node.icon || 'star'"
-                        :color="prop.node.iconcolor || 'orange'"
-                        class="icon-common"
-                      />
-                      <div class="node-common">{{ prop.node.label }}</div>
+                    <div style="cursor:pointer;" @click="treeClick(prop.node.myid)">
+                      <div
+                        class="row items-center no-wrap"
+                        :id="prop.node.myid"
+                      >
+                        <q-icon
+                          :name="prop.node.icon || 'star'"
+                          :color="prop.node.iconcolor || 'orange'"
+                          class="icon-common"
+                        />
+                        <div class="node-common">{{ prop.node.label }}</div>
+                      </div>
+                      <q-menu
+        touch-position
+        context-menu
+      >
+
+        <q-list dense style="min-width: 100px">
+          <q-item clickable v-close-popup>
+            <q-item-section>Open...</q-item-section>
+          </q-item>
+          <q-item clickable v-close-popup>
+            <q-item-section>New</q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item clickable>
+            <q-item-section>Preferences</q-item-section>
+            <q-item-section side>
+              <q-icon name="keyboard_arrow_right" />
+            </q-item-section>
+
+            <q-menu anchor="top right" self="top left">
+              <q-list>
+                <q-item
+                  v-for="n in 3"
+                  :key="n"
+                  dense
+                  clickable
+                >
+                  <q-item-section>Submenu Label</q-item-section>
+                  <q-item-section side>
+                    <q-icon name="keyboard_arrow_right" />
+                  </q-item-section>
+                  <q-menu auto-close anchor="top right" self="top left">
+                    <q-list>
+                      <q-item
+                        v-for="n in 3"
+                        :key="n"
+                        dense
+                        clickable
+                      >
+                        <q-item-section>3rd level Label</q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+              </q-list>
+            </q-menu>
+
+          </q-item>
+          <q-separator />
+          <q-item clickable v-close-popup>
+            <q-item-section>Quit</q-item-section>
+          </q-item>
+        </q-list>
+
+      </q-menu>
                     </div>
                   </template>
 
                   <template v-slot:default-header="prop">
-                    <div class="node-common">{{ prop.node.label }}</div>
+                    <div class="node-common" style="cursor:pointer;" @click="treeClick(prop.node.myid)" @contextmenu="treeContext(prop.node.myid)">{{ prop.node.label }}</div>
                   </template>
 
                   <template v-slot:body-story="prop">
@@ -117,6 +174,17 @@ export default {
           ]
         }
       ])
+    },
+    treeClick: function (inId) {
+      event.cancelBubble = true
+      console.log('click: ' + inId)
+      // JSON.stringify(this)
+    },
+    treeContext: function (inId) {
+      event.cancelBubble = true
+      console.log('click: ' + inId)
+
+      // JSON.stringify(this)
     }
     
   }

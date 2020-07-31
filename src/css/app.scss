@@ -88,3 +88,27 @@ body {
   // max-width:300px;
   margin: 12px !important;
 }
+
+.linkicon {
+  font-size: 40px;
+}
+.linkicon:hover {
+  cursor: pointer;
+}
+
+.ticon {
+  color: red;
+  font-size: 20px;
+  margin-left: 5px;
+  box-sizing: border-box;
+}
+
+.ticon:hover {
+  color: green;
+  border: 1px solid gray;
+  background-color: pink;
+}
+
+.ticonwrapper {
+  box-sizing: border-box;
+}
