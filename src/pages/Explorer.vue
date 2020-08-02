@@ -30,61 +30,7 @@
                         />
                         <div class="node-common">{{ prop.node.label }}</div>
                       </div>
-                      <q-menu
-        touch-position
-        context-menu
-      >
-
-        <q-list dense style="min-width: 100px">
-          <q-item clickable v-close-popup>
-            <q-item-section>Open...</q-item-section>
-          </q-item>
-          <q-item clickable v-close-popup>
-            <q-item-section>New</q-item-section>
-          </q-item>
-          <q-separator />
-          <q-item clickable>
-            <q-item-section>Preferences</q-item-section>
-            <q-item-section side>
-              <q-icon name="keyboard_arrow_right" />
-            </q-item-section>
-
-            <q-menu anchor="top right" self="top left">
-              <q-list>
-                <q-item
-                  v-for="n in 3"
-                  :key="n"
-                  dense
-                  clickable
-                >
-                  <q-item-section>Submenu Label</q-item-section>
-                  <q-item-section side>
-                    <q-icon name="keyboard_arrow_right" />
-                  </q-item-section>
-                  <q-menu auto-close anchor="top right" self="top left">
-                    <q-list>
-                      <q-item
-                        v-for="n in 3"
-                        :key="n"
-                        dense
-                        clickable
-                      >
-                        <q-item-section>3rd level Label</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-item>
-              </q-list>
-            </q-menu>
-
-          </q-item>
-          <q-separator />
-          <q-item clickable v-close-popup>
-            <q-item-section>Quit</q-item-section>
-          </q-item>
-        </q-list>
-
-      </q-menu>
+                      <TreeContextMenu />
                     </div>
                   </template>
 
@@ -106,10 +52,17 @@
 </template>
 <script>
 import { store } from '../mainstore'
+import TreeContextMenu from '../components/TreeContextMenu'
 export default {
+  components: {
+     TreeContextMenu
+  },
   data () {
       return {
-          storeState: store.state
+          storeState: store.state,
+          treeClickCount: 0,
+          treeClickTimer: null,
+          treeDoubleClickDelay: 300
       }
   },
   methods: {
@@ -176,9 +129,29 @@ export default {
       ])
     },
     treeClick: function (inId) {
-      event.cancelBubble = true
-      console.log('click: ' + inId)
+      // event.cancelBubble = true
+      // console.log('click: ' + inId)
       // JSON.stringify(this)
+      // event.preventDefault()
+
+      this.treeClickCount++
+
+      if (this.treeClickCount === 1) {
+        this.treeClickTimer = setTimeout(() => {
+          this.treeClickCount = 0
+          this.treeSingleClick(inId)
+        }, this.treeDoubleClickDelay)
+      } else if (this.treeClickCount === 2) {
+        clearTimeout(this.treeClickTimer)
+        this.treeClickCount = 0
+        this.treeDoubleClick(inId)
+      }
+    },
+    treeSingleClick: function (inId) {
+      console.log('Tree single click')
+    },
+    treeDoubleClick: function (inId) {
+      console.log('Tree double click')
     },
     treeContext: function (inId) {
       event.cancelBubble = true
