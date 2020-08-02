@@ -40,6 +40,10 @@ $story-wrap: nowrap;
   font-weight: $node-font-weight;
   margin-left: -0x;
   // color:pink !important;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   }
 
   .icon-common {

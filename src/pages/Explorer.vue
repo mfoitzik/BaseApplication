@@ -18,7 +18,7 @@
                       @click="mikeclick"
                       @doubleclick="mikedouble"-->
                   <template v-slot:header-generic="prop">
-                    <div style="cursor:pointer;" @click="treeClick(prop.node.myid)">
+                    <div style="cursor:pointer;" @click="treeClick($event, prop.node.myid)">
                       <div
                         class="row items-center no-wrap"
                         :id="prop.node.myid"
@@ -35,7 +35,10 @@
                   </template>
 
                   <template v-slot:default-header="prop">
-                    <div class="node-common" style="cursor:pointer;" @click="treeClick(prop.node.myid)" @contextmenu="treeContext(prop.node.myid)">{{ prop.node.label }}</div>
+                    <div class="node-common" style="cursor:pointer;" @click="treeClick($event, prop.node.myid)" @contextmenu="treeContext(prop.node.myid)">
+                      <TreeContextMenu />
+                      {{ prop.node.label }}
+                      </div>
                   </template>
 
                   <template v-slot:body-story="prop">
@@ -128,11 +131,12 @@ export default {
         }
       ])
     },
-    treeClick: function (inId) {
-      // event.cancelBubble = true
+    treeClick: function (event, inId) {
+      // console.log(event)
+      event.cancelBubble = true
       // console.log('click: ' + inId)
       // JSON.stringify(this)
-      // event.preventDefault()
+      event.preventDefault()
 
       this.treeClickCount++
 
