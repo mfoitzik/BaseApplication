@@ -2,6 +2,7 @@
     <div>
         <div @contextmenu="showNodeSelected">TEST</div>
             <div class="q-pa-md">
+              <button v-on:click="logStore">Log store vals</button>
               <button v-on:click="testTreeUpdate">Test Tree Update</button>
               <button v-on:click="showParam">Test Param</button>
               <button v-on:click="showNodeSelected">showClickedNode</button>
@@ -71,6 +72,10 @@ export default {
   methods: {
     showParam: function () {
       console.log(this.customize)
+    },
+    logStore: function () {
+      console.log(store.state.textEditor)
+      console.log(store.state.htmlEditor)
     },
     showNodeSelected: function () {
       this.$refs.mytree.setExpanded('Good food', false)
@@ -152,10 +157,10 @@ export default {
       }
     },
     treeSingleClick: function (inId) {
-      console.log('Tree single click')
+      console.log('Tree single click:' + inId)
     },
     treeDoubleClick: function (inId) {
-      console.log('Tree double click')
+      console.log('Tree double click: ' + inId)
     },
     treeContext: function (inId) {
       event.cancelBubble = true

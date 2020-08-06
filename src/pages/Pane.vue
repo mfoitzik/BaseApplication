@@ -34,7 +34,7 @@
         </template>
 
         <template v-slot:after>
-          <div style="background-color: white;height: calc(100vh - 57px);border:1px solid red;overflow: hidden;">
+          <div style="background-color: white;height: calc(100vh - 57px);overflow: hidden;">
             <q-splitter
               v-model="splitterModel2"
               :limits="[0, Infinity]"
@@ -42,7 +42,10 @@
               style="min-height: inherit;height:100%;"
             >
               <template v-slot:before>
-                <div class="q-pa-none bg-brown-11 full-height" style="overflow:auto;">
+                <div 
+                class="q-pa-none bg-brown-11" 
+                style="border:2px solid blue;overflow:auto;box-sizing: border-box;height:100%;display:flex;flex-flow:column;"
+                ref="splitterTop">
                   <!--<q-tab-panels v-model="panel" animated class="full-height">
                   <q-tab-panel name="mails" class="q-pa-none">
                     <div v-html="splashContent"> </div>
@@ -71,18 +74,18 @@
                     inline-label
                     @click="tabSelected"
                   >
-                    <q-tab v-for="tab in filteredTabs" :key="tab.name" :name="tab.name">
+                    <q-tab v-for="tab in filteredTabs" :key="tab.location" :name="tab.location">
                         <div>{{tab.label}}</div><div class="ticonwrapper"><q-icon class="ticon" @click.stop="tabIconClick(tab)" name="folder" /></div>
                     </q-tab>
                   </q-tabs>
-                  <q-separator />
-
-                  <q-tab-panels v-model="tab" animated>
-                      <q-tab-panel v-for="tabpanel in tabStore.mainTabs" :key="tabpanel.name" :name="tabpanel.name">
-                          <div class="text-h6">{{tabpanel.data}}</div>
-                      {{tabpanel.text}}
-                      </q-tab-panel>
-                  </q-tab-panels>
+                  <!--<q-separator class="" style="height:1px;" />-->
+                  <div style="border:3px solid orange;flex-grow : 1;" ref="tabPanelWrapper">
+                    <q-tab-panels v-model="tab" animated class="" style="background-color:yellow;border:3px solid purple;box-sizing: border-box !important;height:100%;" ref="tabHolder">
+                        <q-tab-panel v-for="tabpanel in tabStore.mainTabs" :key="tabpanel.location" :name="tabpanel.location" class="q-pa-none full-height">
+                            <tab-editor-selector :template="tabpanel.template" :editor-data="tabpanel.data" :editor-index=tabpanel.index />
+                        </q-tab-panel>
+                    </q-tab-panels>
+                  </div>
                 </div>
               </template>
 
@@ -114,11 +117,11 @@
 </template>
 
 <script>
-import LinedTextarea from 'components/LinedTextarea'
+import TabEditorSelector from '../components/TabEditorSelector'
 import { copyToClipboard } from 'quasar' 
 import { store } from '../mainstore'
 import splash from '../templates/splash'
-console.log(splash)
+// console.log(splash)
 const dialog = electron.remote.dialog
 const globalShortcut = electron.remote.globalShortcut
 const getCurrentWindow = electron.remote.getCurrentWindow
@@ -127,6 +130,7 @@ const firstBy = require('thenby')
 export default {
   components: {
      // LinedTextarea
+     TabEditorSelector
   },
   data () {
     return {
@@ -198,8 +202,12 @@ export default {
     }
   },
   methods: {
+    splitterTopResize () {
+      // console.log('XXXXXXX: ' + this.$refs.tabPanelWrapper.clientHeight) 
+      store.state.editorHeight = this.$refs.tabPanelWrapper.clientHeight
+    },
     testText () {
-      this.tvalue = 'line1\nline2'
+    this.tvalue = 'line1\nline2'
     },
     openExternalBrowser (e) {
       electron.remote.shell.openExternal(e.target.href)
@@ -583,14 +591,21 @@ export default {
   mounted () {
     // alert('mounted has been called')
     // Tab (name, label, template, data, location, dirty) 
+    // tab object: Tab (name, label, template, data, location, dirty)
     this.tabStore.mainTabs = []
-    const a = new store.Tab(null, 'tab A', '', 'This is tab a', 'a location', false)
-    const b = new store.Tab('Tab B', 'tab B', '', 'This is tab B', 'B location', false)
-    const c = new store.Tab('Tab C', 'tab C', '', 'This is tab C', 'C location', false)
+    const a = new store.Tab(null, 'Welcome to BaseApplication', 'splash', '', 'splash', false)
+    const b = new store.Tab('Tab B', 'tab B', 'text', 'This is tab B', 'B location', false)
+    const c = new store.Tab('Tab C', 'tab C', 'html', 'This is tab C', 'C location', false)
     store.addToMainTabs(a)
     store.addToMainTabs(b)
     store.addToMainTabs(c)
-    this.tab = 'Tab B'
+    // store.addToMainTabs(c)
+    this.tab = 'splash'
+    const th = this.$refs.tabHolder
+    // console.log('I AM MOUNTED HERE IOS TAB')
+    // console.log(th.$el.clientHeight)
+    // console.log('HEIGHT: ' + height(th))
+    store.state.editorHeight = this.$refs.tabPanelWrapper.clientHeight - 50
   },
   computed: {
     // a computed getter 
@@ -598,7 +613,7 @@ export default {
       var returnArray = this.tabStore.mainTabs.filter(function (el) {
         return el.name !== null
       })
-      console.log(returnArray)
+      // console.log(returnArray)
       return returnArray
     }
   }

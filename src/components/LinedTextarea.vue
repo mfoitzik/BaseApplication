@@ -1,5 +1,5 @@
-<template>
-  <div class="lined-textarea" style="border:3px solid green;">
+<template id="mtest">
+  <div class="lined-textarea" style="box-sizing: border-box;" id="lta">
     <div
       class="lined-textarea__lines"
       v-if="!disabled"
@@ -39,11 +39,14 @@
 
 <script>
 export default {
-  name: 'LinedTextarea',
+  name: 'LinedTextArea',
   mounted () {
     this.content = this.value
     this.syncScroll()
     this.calculateCharactersPerLine()
+    // console.log('TEXT EDITOR')
+    // console.log(this.$parent.$el.clientHeight)
+    // this.styles = {height: this.$parent.$el.clientHeight + 'px'}
   },
   data () {
     return {
@@ -71,7 +74,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          height: '100%',
+          height: '250px;',
         }
       },
     },
@@ -262,7 +265,7 @@ p {
 }
 .lined-textarea__content {
   border: 1px solid #d7e2ed;
-  border-radius: 0 10px 10px 0;
+  /*border-radius: 0 10px 10px 0;*/
   border-left-width: 0;
   margin: 0;
   line-height: inherit;
@@ -288,7 +291,7 @@ p {
 }
 
 .lined-textarea__content--disabled {
-  border-radius: 10px;
+  /*border-radius: 10px;*/
   border-left-width: 1px;
 }
 

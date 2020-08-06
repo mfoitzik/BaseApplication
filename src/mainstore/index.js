@@ -2,12 +2,16 @@ export const store = {
     state: {
       explorer: [],
       mainTabs: [],
-      selectedTab: ''
+      selectedTab: '',
+      editorHeight: 400,
+      textEditor: '',
+      htmlEditor: ''
     },
     updateExplorer (newTree) {
         this.state.explorer = newTree
     },
     addToMainTabs (newTab) {
+      newTab.index = this.state.mainTabs.length
       this.state.mainTabs.push(newTab)
     },
     deleteFromMainTabs (tabName) {
