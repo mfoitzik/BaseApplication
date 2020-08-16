@@ -2,15 +2,10 @@
   <div class="q-pa-none">
     <q-layout view="lHh lpr fFf">
       <q-header>
-        <q-bar class="q-electron-drag menu-bar" style="padding-left: 0px;">
+        <q-bar class="q-electron-drag menubar">
           <q-img
             src="../assets/BaseApplicationLogoWeb7.svg"
-            style="
-              height: 30px;
-              width: 26px;
-              margin-left: 11px;
-              margin-right: 11px;
-            "
+            class="menubar-logo"
           />
           <div
             class="q-electron-drag--exception cursor-pointer non-selectable q-px-sm row items-center ba-menu-item"
@@ -93,8 +88,8 @@
       <q-page-container>
         <router-view />
       </q-page-container>
-      <q-footer class="bg-grey-8 text-white footerHeight">
-        <q-toolbar class="status-bar" style="height: 25px; min-height: 25px;">
+      <q-footer>
+        <q-toolbar class="status-bar">
           <q-icon name="settings" />
           <q-space />
           <div style="padding-left: 8px; padding-right: 8px;">online</div>

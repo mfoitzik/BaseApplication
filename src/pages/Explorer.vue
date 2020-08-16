@@ -1,12 +1,13 @@
 <template>
     <div>
-        <div @contextmenu="showNodeSelected">TEST</div>
             <div class="q-pa-md">
-              <button v-on:click="logStore">Log store vals</button>
+              <!--<button v-on:click="logStore">Log store vals</button>
               <button v-on:click="testTreeUpdate">Test Tree Update</button>
               <button v-on:click="showParam">Test Param</button>
-              <button v-on:click="showNodeSelected">showClickedNode</button>
+              <button v-on:click="showNodeSelected">showClickedNode</button>-->
               <div class="tree-wrapper">
+                <p><strong>No project currently selected.</strong></p>
+                <p v-if="storeState.explorer.length === 0">Use File &gt; Open Folder to select a project.</p>
                 <q-tree
                   :nodes="storeState.explorer"
                   :duration="100"

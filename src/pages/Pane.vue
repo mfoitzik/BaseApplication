@@ -18,15 +18,14 @@
       </div>
     </div>
     <div class="col" style="display: inline-block;">
-      <q-splitter v-model="splitterModel">
+      <q-splitter 
+      v-model="splitterModel"
+      separator-class="mainpane-seperator"
+      separator-style="width: 3px"
+      >
         <template v-slot:before>
           <div
-            class="q-pa-sm"
-            style="
-              border: 1px solid red;
-              height: calc(100vh - 57px);
-              overflow: auto;
-            "
+            class="q-pa-sm mainpane-left"
             visible
           >
             <router-view />
@@ -34,52 +33,34 @@
         </template>
 
         <template v-slot:after>
-          <div style="background-color: white;height: calc(100vh - 57px);overflow: hidden;">
+          <div class="mainpane-right">
             <q-splitter
               v-model="splitterModel2"
               :limits="[0, Infinity]"
               :horizontal="splitterOrientation"
-              style="min-height: inherit;height:100%;"
+              class="rightpane"
             >
               <template v-slot:before>
                 <div 
-                class="q-pa-none bg-brown-11" 
-                style="border:2px solid blue;overflow:auto;box-sizing: border-box;height:100%;display:flex;flex-flow:column;"
+                class="q-pa-none rightpane-top" 
                 ref="splitterTop">
-                  <!--<q-tab-panels v-model="panel" animated class="full-height">
-                  <q-tab-panel name="mails" class="q-pa-none">
-                    <div v-html="splashContent"> </div>
-                    <LinedTextarea style="height:100%;" v-model="tvalue" />
-                    <button v-on:click="testText">Test Text</button>
-                  </q-tab-panel>
-
-                  <q-tab-panel name="alarms">
-                    <div class="text-h6">Alarms</div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </q-tab-panel>
-
-                  <q-tab-panel name="movies">
-                    <div class="text-h6">Movies</div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </q-tab-panel>
-                </q-tab-panels>-->
+                <div class="full-width tabs-wrapper">
                   <q-tabs
                     v-model="tab"
                     dense
-                    class="text-grey"
-                    active-color="primary"
-                    indicator-color="primary"
+                    indicator-color="tabs-active-indicator"
                     align="left"
-                    narrow-indicator
                     inline-label
                     @click="tabSelected"
+                    active-bg-color="tabs-active"
+                    active-color="tabs-active-text"
                   >
                     <q-tab v-for="tab in filteredTabs" :key="tab.location" :name="tab.location">
-                        <div>{{tab.label}}</div><div class="ticonwrapper"><q-icon class="ticon" @click.stop="tabIconClick(tab)" name="folder" /></div>
+                        <div>{{tab.label}}</div><div class="ticonwrapper"><q-icon class="ticon" @click.stop="tabIconClick(tab)" name="close" /></div>
                     </q-tab>
                   </q-tabs>
-                  <!--<q-separator class="" style="height:1px;" />-->
-                  <div style="border:3px solid orange;flex-grow : 1;" ref="tabPanelWrapper">
+                  </div>
+                  <div class="tab-panel-wrapper" ref="tabPanelWrapper">
                     <q-tab-panels v-model="tab" animated class="" style="background-color:yellow;border:3px solid purple;box-sizing: border-box !important;height:100%;" ref="tabHolder">
                         <q-tab-panel v-for="tabpanel in tabStore.mainTabs" :key="tabpanel.location" :name="tabpanel.location" class="q-pa-none full-height">
                             <tab-editor-selector :template="tabpanel.template" :editor-data="tabpanel.data" :editor-index=tabpanel.index />
@@ -90,7 +71,7 @@
               </template>
 
               <template v-slot:after>
-                <div class="q-pa-md bg-teal-2 full-height" style="overflow:auto;">
+                <div class="q-pa-md full-height rightpane-bottom">
                   <div class="text-h4 q-mb-md">After</div>
                   <p>test line</p>
                 <p>test line</p>

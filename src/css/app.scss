@@ -1,6 +1,59 @@
 // app global css in SCSS form
 @import "treeoverride";
 @import "test.css";
+$header-height: 32px;
+$status-height: 25px;
+
+// need to rename these follwoing two
+$rightpane-top-background-color: #ffffff;
+$rightpane-bottom-background-color: #ffffff;
+
+// Theming colors
+$MenuBarBackground: #009689;
+$MenuBarText: #fefefe;
+$ActivitySelectorBackground: #10a69b;
+$ActivitySelectorText: #e0e0e0;
+$ActivitySelectorTextHover: #ffffff;
+$ActivityPaneBackground: #ffffff;
+$ActivityPaneText: #000000;
+$WorkPaneBackground: #ffffff;
+$WorkPaneText: #000000;
+$WorkPaneTabsBackground: #008075;
+$WorkPaneTabInactiveBackground: #008f83;
+$WorkPaneTabInactiveText: #e0e0e0;
+$WorkPaneTabActiveBackground: #00665e;
+$WorkPaneTabActiveIndicator: #00f2de;
+$WorkPaneTabActiveText: #e0e0e0;
+$UtilityPaneBackground: #ffffff;
+$UtilityPaneText: #000000;
+$StatusBarBackground: #0099ee;
+$StatusBarText: #ffffff;
+
+.tabs-wrapper {
+  background-color: $WorkPaneTabsBackground;
+}
+.bg-tabs-active {
+  background-color: $WorkPaneTabActiveBackground;
+}
+
+.text-tabs-active-text {
+  color: $WorkPaneTabActiveText;
+}
+
+.text-tabs-active-indicator {
+  color: $WorkPaneTabActiveIndicator;
+}
+
+.tabs-inactive {
+  background-color: $WorkPaneTabInactiveBackground;
+  color: $WorkPaneTabInactiveText;
+}
+
+//haven't figured out how to change inactyove color wothout overriding this class
+.q-tab--inactive {
+  background-color: $WorkPaneTabInactiveBackground !important;
+  color: $WorkPaneTabInactiveText !important;
+}
 
 body {
   overflow: hidden;
@@ -9,9 +62,6 @@ body {
 .my-picker {
   max-width: 150px;
   width: 100px;
-}
-.footerHeight {
-  height: 25px;
 }
 
 .ba-menu-item {
@@ -26,9 +76,7 @@ body {
   }
 }
 
-.menu-bar {
-  background-color: $teal-6;
-}
+
 
 .activity-selector {}
 
@@ -40,9 +88,7 @@ body {
   min-height: inherit;
 }
 
-.status-bar {
-  background-color: $blue-6;
-}
+
 
 .work-pane {}
 
@@ -122,4 +168,70 @@ body {
 
 .texteditor:hover {
   background-color: white !important;
+}
+
+.mainpane-seperator {
+  background-color: #444444;
+}
+.mainpane-left {
+  height: calc(100vh - #{$header-height} - #{$status-height});
+  overflow: auto;
+}
+
+.mainpane-right {
+  background-color: white;
+  height: calc(100vh - #{$header-height} - #{$status-height});
+  overflow: hidden;
+}
+
+.rightpane {
+  min-height: inherit;
+  height:100%;
+}
+
+.rightpane-top {
+  border:2px solid blue;
+  overflow:auto;
+  box-sizing: border-box;
+  height:100%;
+  display:flex;
+  flex-flow:column;
+  background-color: $rightpane-top-background-color;
+}
+
+.rightpane-bottom {
+  overflow:auto;
+  background-color: $rightpane-bottom-background-color;
+}
+
+.tab-panel-wrapper {
+  border:3px solid orange;
+  flex-grow : 1;
+}
+
+.bg-tab-bg {
+  background-color: purple;
+}
+
+.text-tab-bg {
+  color: white;
+}
+
+.menubar-logo {
+  height: 30px;
+  width: 26px;
+  margin-left: 11px;
+  margin-right: 11px;
+}
+
+.menubar {
+  background-color: $teal-6;
+  padding-left: 0px;
+}
+
+.status-bar {
+  background-color: $blue-6;
+  color: white;
+  height: 25px; 
+  min-height: 25px;
 }
