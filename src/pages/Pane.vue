@@ -36,6 +36,8 @@
           <div class="mainpane-right">
             <q-splitter
               v-model="splitterModel2"
+              separator-class="mainpane-seperator"
+              separator-style="height: 3px"
               :limits="[0, Infinity]"
               :horizontal="splitterOrientation"
               class="rightpane"
@@ -61,7 +63,7 @@
                   </q-tabs>
                   </div>
                   <div class="tab-panel-wrapper" ref="tabPanelWrapper">
-                    <q-tab-panels v-model="tab" animated class="" style="background-color:yellow;border:3px solid purple;box-sizing: border-box !important;height:100%;" ref="tabHolder">
+                    <q-tab-panels v-model="tab" animated class="tab-panel" ref="tabHolder">
                         <q-tab-panel v-for="tabpanel in tabStore.mainTabs" :key="tabpanel.location" :name="tabpanel.location" class="q-pa-none full-height">
                             <tab-editor-selector :template="tabpanel.template" :editor-data="tabpanel.data" :editor-index=tabpanel.index />
                         </q-tab-panel>

@@ -15,7 +15,7 @@
     />-->
     <textarea class="self-stretch texteditor" v-model="dataEditorData" />
     </div>
-    <div v-if="template==='html'" id="testobs" class="row" style="border:4px solid black;height:100%;box-sizing: border-box;">
+    <div v-if="template==='html'" id="testobs" class="row" style="height:100%;box-sizing: border-box;">
         <q-editor id="testmike" v-model="dataEditorData" class="fit" :height="hHeight" />
     </div>
   </div>

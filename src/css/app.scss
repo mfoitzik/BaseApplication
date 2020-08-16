@@ -23,11 +23,32 @@ $WorkPaneTabInactiveBackground: #008f83;
 $WorkPaneTabInactiveText: #e0e0e0;
 $WorkPaneTabActiveBackground: #00665e;
 $WorkPaneTabActiveIndicator: #00f2de;
-$WorkPaneTabActiveText: #e0e0e0;
+$WorkPaneTabActiveText: #ffffff;
 $UtilityPaneBackground: #ffffff;
 $UtilityPaneText: #000000;
 $StatusBarBackground: #0099ee;
 $StatusBarText: #ffffff;
+$TabCloseIconColor: #ffffff;
+$TabCloseIconBorderColor: #ffffff;
+$TabCloseIconColorHover: #ff0000;
+$TabCloseIconBackgroundColorHover: #ffffff;
+$TabCloseIconBorderColorHover: #ff0000;
+
+.ticon {
+  color: $TabCloseIconColor;
+  font-size: 14px;
+  margin-left: 5px;
+  box-sizing: border-box;
+  margin-bottom: 1px;
+  border: 1px solid $TabCloseIconBorderColor;
+}
+
+.ticon:hover {
+  color: $TabCloseIconColorHover;
+  border: 1px solid $TabCloseIconBorderColorHover;
+  border-radius: 3px;
+  background-color: $TabCloseIconBackgroundColorHover;
+}
 
 .tabs-wrapper {
   background-color: $WorkPaneTabsBackground;
@@ -142,18 +163,7 @@ body {
   cursor: pointer;
 }
 
-.ticon {
-  color: red;
-  font-size: 20px;
-  margin-left: 5px;
-  box-sizing: border-box;
-}
 
-.ticon:hover {
-  color: green;
-  border: 1px solid gray;
-  background-color: pink;
-}
 
 .ticonwrapper {
   box-sizing: border-box;
@@ -190,7 +200,6 @@ body {
 }
 
 .rightpane-top {
-  border:2px solid blue;
   overflow:auto;
   box-sizing: border-box;
   height:100%;
@@ -205,10 +214,13 @@ body {
 }
 
 .tab-panel-wrapper {
-  border:3px solid orange;
   flex-grow : 1;
 }
-
+.tab-panel {
+  background-color:beige;
+  box-sizing: border-box !important;
+  height:100%;
+}
 .bg-tab-bg {
   background-color: purple;
 }
@@ -220,8 +232,8 @@ body {
 .menubar-logo {
   height: 30px;
   width: 26px;
-  margin-left: 11px;
-  margin-right: 11px;
+  margin-left: 11px !important;
+  margin-right: 11px !important;
 }
 
 .menubar {
